@@ -1,0 +1,27 @@
+{
+    "workbench.colorCustomizations": {
+        // 노트북 출력 셀 배경
+        "notebook.outputContainerBackgroundColor": "#f8f8f8",
+        "notebook.outputContainerBorderColor": "#dddddd",
+
+        // 에러/경고 텍스트가 표시되는 영역
+        "editorError.foreground": "#cc0000",
+        "editorWarning.foreground": "#b8860b",
+
+        // 터미널(stderr) 출력 색상
+        "terminal.ansiBrightRed": "#cc0000",
+        "terminal.ansiRed": "#aa0000",
+        "terminal.foreground": "#1a1a1a",
+        "terminal.background": "#ffffff",
+
+        // 노트북 일반 텍스트
+        "notebook.cellStatusBarItemHoverBackground": "#e8e8e8",
+        "notebook.selectedCellBackground": "#eef4fb",
+        "notebook.inactiveSelectedCellBorder": "#aaaaaa",
+        "notebook.focusedCellBorder": "#0066cc"
+    },
+
+    // Jupyter 출력 폰트
+    "notebook.output.fontSize": 13,
+    "notebook.output.lineHeight": 1.6
+}
