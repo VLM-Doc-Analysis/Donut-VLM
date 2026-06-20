@@ -1,5 +1,12 @@
 # Model checkpoints (large binary files)
 checkpoints/
+checkpoints_drawings/
+checkpoints_elements/
+
+# YOLO training outputs
+runs/
+detection/**/runs/
+*.pt
 
 # Dataset cache
 data/

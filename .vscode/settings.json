@@ -1,27 +1,29 @@
 {
     "workbench.colorCustomizations": {
-        // 노트북 출력 셀 배경
-        "notebook.outputContainerBackgroundColor": "#f8f8f8",
-        "notebook.outputContainerBorderColor": "#dddddd",
-
-        // 에러/경고 텍스트가 표시되는 영역
-        "editorError.foreground": "#cc0000",
-        "editorWarning.foreground": "#b8860b",
-
-        // 터미널(stderr) 출력 색상
-        "terminal.ansiBrightRed": "#cc0000",
-        "terminal.ansiRed": "#aa0000",
-        "terminal.foreground": "#1a1a1a",
-        "terminal.background": "#ffffff",
-
-        // 노트북 일반 텍스트
-        "notebook.cellStatusBarItemHoverBackground": "#e8e8e8",
-        "notebook.selectedCellBackground": "#eef4fb",
-        "notebook.inactiveSelectedCellBorder": "#aaaaaa",
-        "notebook.focusedCellBorder": "#0066cc"
+        "notebook.outputContainerBackgroundColor": "#1e1e1e",
+        "notebook.outputContainerBorderColor": "#444444",
+        "terminal.foreground": "#f0f0f0",
+        "terminal.background": "#1e1e1e",
+        "terminal.ansiBlack": "#4a4a4a",
+        "terminal.ansiBrightBlack": "#909090",
+        "terminal.ansiRed": "#ff5f57",
+        "terminal.ansiBrightRed": "#ff8080",
+        "terminal.ansiGreen": "#5af78e",
+        "terminal.ansiBrightGreen": "#a8ff97",
+        "terminal.ansiYellow": "#f3f99d",
+        "terminal.ansiBrightYellow": "#ffffa0",
+        "terminal.ansiBlue": "#57c7ff",
+        "terminal.ansiBrightBlue": "#96d9ff",
+        "terminal.ansiMagenta": "#ff6ac1",
+        "terminal.ansiBrightMagenta": "#ffb3e0",
+        "terminal.ansiCyan": "#9aedfe",
+        "terminal.ansiBrightCyan": "#c0f5ff",
+        "terminal.ansiWhite": "#f0f0f0",
+        "terminal.ansiBrightWhite": "#ffffff",
+        "notebookStatusErrorIcon.foreground": "#ff5f57",
+        "editorError.foreground": "#ff5f57",
+        "editorWarning.foreground": "#f3f99d"
     },
-
-    // Jupyter 출력 폰트
     "notebook.output.fontSize": 13,
     "notebook.output.lineHeight": 1.6
 }
