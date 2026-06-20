@@ -1,0 +1,16 @@
+# Element 검출 데이터셋 (YOLOv11-OBB, 회전 박스)
+# CVAT 에서 rotated rectangle 로 라벨링 → "Ultralytics YOLO Oriented Bounding Boxes" 포맷 export
+# 라벨 파일: detection/element/datasets/element/labels/{train,val}/<stem>.txt
+#   각 줄: <class> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>   (모두 0~1 정규화, 4점)
+#
+# 입력 이미지는 view 크롭(data/view_crops). 경로는 이 yaml 위치 기준 상대경로.
+path: datasets/element
+train: images/train
+val: images/val
+
+# 4 클래스: 사용자 확정 (치수/공차/GD&T/거칠기)
+names:
+  0: dimension   # 치수
+  1: tolerance   # 공차
+  2: gdt         # 기하공차 GD&T
+  3: roughness   # 표면 거칠기
