@@ -86,9 +86,49 @@ model.train(
 )
 ```
 
+> **`runs/` 폴더는 직접 만들지 않습니다.** `model.train(...)` 을 실행하면 Ultralytics 가
+> 자동으로 `runs/view/` 를 생성하고 그 안을 다음으로 채웁니다:
+>
+> ```
+> detection/view/runs/view/
+> ├── weights/
+> │   ├── best.pt      # 검증 성능 최고 가중치 (파이프라인이 찾는 파일)
+> │   └── last.pt      # 마지막 epoch 가중치
+> ├── results.csv      # epoch별 loss·mAP 등 지표 로그
+> ├── results.png      # 학습 곡선 그래프
+> ├── confusion_matrix.png
+> ├── val_batch*.jpg   # 검증셋 예측 시각화
+> └── args.yaml        # 사용된 학습 하이퍼파라미터
+> ```
+>
+> 즉 `runs/` 가 없다는 것은 **아직 학습을 한 번도 돌리지 않았다**는 뜻이며,
+> cell 3 을 실행하면 자동으로 채워집니다. (`project="runs", name="view"` 설정이 경로를 결정.)
+>
+> ℹ️ Ultralytics 기본 경로는 `runs/detect/train/` 이지만, 이 노트북은 `project`/`name` 으로
+> 덮어써서 파이프라인이 찾는 `runs/view/` 에 정확히 생성되도록 합니다.
+
 ### ④ element 모델 학습 — `detection/element/train_element.ipynb`
 view 와 동일한 절차로 실행 → `detection/element/runs/element/weights/best.pt` 생성.
 이게 있어야 파이프라인의 `ELEM_PT` 도 채워짐.
+
+> **`runs/` 폴더는 직접 만들지 않습니다.** element 도 `model.train(...)` 실행 시 Ultralytics 가
+> 자동으로 `runs/element/` 를 생성하고 그 안을 다음으로 채웁니다:
+>
+> ```
+> detection/element/runs/element/
+> ├── weights/
+> │   ├── best.pt      # 검증 성능 최고 가중치 (파이프라인의 ELEM_PT)
+> │   └── last.pt      # 마지막 epoch 가중치
+> ├── results.csv      # epoch별 loss·mAP 등 지표 로그
+> ├── results.png      # 학습 곡선 그래프
+> ├── confusion_matrix.png
+> ├── val_batch*.jpg   # 검증셋 예측 시각화
+> └── args.yaml        # 사용된 학습 하이퍼파라미터
+> ```
+>
+> view 와 마찬가지로 `runs/` 가 없다는 것은 **아직 학습 미실행**이라는 뜻이며,
+> 학습 셀을 실행하면 자동으로 채워집니다. (element 는 OBB 모델이므로 `yolo11n-obb.pt` 시드 +
+> `project="runs", name="element"` 설정이 경로를 결정.)
 
 이 두 학습이 끝나면 `pipeline_drawing.ipynb` 의 `YOLO(VIEW_PT)` 가 정상 동작합니다.
 
