@@ -63,6 +63,8 @@ def convert(xml_path: Path, images_dir: Path, out_root: Path):
 
     for image in root.findall("image"):
         name = image.get("name")
+        if not name:                       # name 속성 없는 <image> 는 건너뜀
+            continue
         stem = Path(name).stem
         # CVAT name 이 경로를 포함할 수 있으므로 파일명만으로도 찾아봄
         src = images_dir / name
@@ -77,8 +79,8 @@ def convert(xml_path: Path, images_dir: Path, out_root: Path):
 
         for i, box in enumerate(image.findall("box")):
             label = box.get("label")
-            xtl, ytl = float(box.get("xtl")), float(box.get("ytl"))
-            xbr, ybr = float(box.get("xbr")), float(box.get("ybr"))
+            xtl, ytl = float(box.get("xtl", "0")), float(box.get("ytl", "0"))
+            xbr, ybr = float(box.get("xbr", "0")), float(box.get("ybr", "0"))
             rot = float(box.get("rotation", "0"))
             quad = rotated_corners(xtl, ytl, xbr, ybr, rot)
 

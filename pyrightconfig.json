@@ -1,0 +1,6 @@
+{
+  "typeCheckingMode": "standard",
+  "extraPaths": [
+    "yolo_finetune_donut_pipeline/detection"
+  ]
+}
