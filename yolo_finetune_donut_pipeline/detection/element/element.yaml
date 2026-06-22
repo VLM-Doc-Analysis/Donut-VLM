@@ -8,9 +8,11 @@ path: datasets/element
 train: images/train
 val: images/val
 
-# 4 클래스: 사용자 확정 (치수/공차/GD&T/거칠기)
+# 6 클래스: raw_kaardi_data/data.yaml 기준 (이 데이터셋의 라벨 인덱스와 일치)
 names:
-  0: dimension   # 치수
-  1: tolerance   # 공차
-  2: gdt         # 기하공차 GD&T
-  3: roughness   # 표면 거칠기
+  0: Dimension          # 치수
+  1: GD&T_FCF           # 기하공차 FCF(Feature Control Frame)
+  2: Datum              # 데이텀
+  3: Surface_Roughness  # 표면 거칠기
+  4: Section            # 단면 표시
+  5: Hole_Callout       # 홀 콜아웃

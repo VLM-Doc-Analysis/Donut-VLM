@@ -11,6 +11,10 @@ detection/**/runs/
 # Dataset cache
 data/
 
+# Detection datasets (CVAT/YOLO 이미지·라벨) 및 생성 산출물
+datasets/
+output/
+
 # Python
 __pycache__/
 *.py[cod]
