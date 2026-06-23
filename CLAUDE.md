@@ -87,8 +87,11 @@ Step 1 의 단일 `CFG` 딕셔너리로 구동. 실제로 만지는 값:
 
 ## 데이터 레이아웃
 
-`data/`·`checkpoints/` 는 **gitignored**(대용량) — 커밋 금지. `checkpoints_drawings/` 는 .gitignore 에 없지만
-체크포인트 바이너리는 그래도 커밋 금지. `donut_base_test.ipynb` 도 gitignored.
+대용량 산출물(`data/`·`checkpoints*/`·`output/`·`datasets/`)은 **Git LFS** 로 추적·커밋한다.
+가중치(`*.safetensors`·`*.pt`·`*.pth`)는 `.gitattributes` 의 LFS 필터로 포인터화되어 저장됨.
+클론 후 `git lfs install && git lfs pull` 로 실제 바이너리를 받는다(미설치 시 포인터만). LFS 용량이
+십수 GB 라 GitHub LFS 무료 한도(각 1 GB/월)를 초과 — 유료 데이터 플랜 필요. `runs/`·`__pycache__/`·
+`.venv/`·`donut_base_test.ipynb` 등은 여전히 `.gitignore` 제외.
 
 **로컬 데이터셋 포맷**: `<root>/images/*.{png,jpg,...}` + `<root>/labels/<같은-stem>.json`. stem 이 매칭되는 쌍만 사용.
 - `data/raw/` — 영수증 원본. CORD 노트북의 "[선택] 로컬 데이터셋 준비" 셀이 `data/processed/{train,val}/...` 로 분할(`VAL_RATIO=0.1`, seed 42).

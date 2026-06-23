@@ -56,8 +56,12 @@ PDF ──rasterize(300 DPI)──▶ page.png
 
 ## 데이터 레이아웃
 
-대용량이라 `data/` · `checkpoints*/` · `runs/` · `datasets/` 는 **커밋하지 않습니다**(.gitignore).
+대용량 산출물(`data/` · `checkpoints*/` · `output/` · `datasets/`)은 **Git LFS** 로 추적·커밋합니다.
+가중치(`*.safetensors` · `*.pt` · `*.pth`)는 `.gitattributes` 의 LFS 필터를 통해 포인터로 저장됩니다.
+(`runs/` · `__pycache__/` · `.venv/` · `donut_base_test.ipynb` 등은 여전히 `.gitignore` 제외)
 
+- **클론 후**: `git lfs install` → `git lfs pull` 로 실제 바이너리를 내려받습니다(미설치 시 포인터만 받음).
+- **주의**: LFS 저장 용량은 십수 GB 규모라 GitHub LFS 무료 한도(스토리지·대역폭 각 1 GB/월)를 초과합니다 — 유료 데이터 플랜 필요.
 - 로컬 Donut 포맷: `<root>/images/*.png` + `<root>/labels/<stem>.json` (stem 이 매칭되는 쌍만 사용)
 - **라벨 품질 = 모델 품질**: 모든 라벨 JSON 의 키 구조를 일관되게 유지하세요.
 
