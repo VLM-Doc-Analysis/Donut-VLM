@@ -1,19 +1,19 @@
 # Model checkpoints (large binary files)
-checkpoints/
-checkpoints_drawings/
-checkpoints_elements/
+# checkpoints/
+# checkpoints_drawings/
+# checkpoints_elements/
 
 # YOLO training outputs
 runs/
-detection/**/runs/
-*.pt
+# detection/**/runs/
+# *.pt
 
 # Dataset cache
-data/
+# data/
 
 # Detection datasets (CVAT/YOLO 이미지·라벨) 및 생성 산출물
-datasets/
-output/
+# datasets/
+# output/
 
 # Python
 __pycache__/
@@ -27,4 +27,4 @@ __pycache__/
 
 # OS
 .DS_Store
-donut_base_test.ipynb
+# donut_base_test.ipynb
