@@ -1,0 +1,26 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Drawing_no": "A23-369447-8",
+    "Material": "SS400"
+  },
+  "dimensions": {
+    "outer_diameter": "920",
+    "bore_diameter": "575",
+    "thickness": "22"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "24",
+      "diameter": "30"
+    }
+  },
+  "surface_finish": {
+    "general": "12.5"
+  },
+  "date": "2025-04-21",
+  "notes": [
+    "2-5 assembly",
+    "용접 후 HOLE 가공 할 것"
+  ]
+}

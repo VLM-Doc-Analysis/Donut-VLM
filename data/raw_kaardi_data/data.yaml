@@ -1,0 +1,9 @@
+names:
+  0: Dimension
+  1: GD&T_FCF
+  2: Datum
+  3: Surface_Roughness
+  4: Section
+  5: Hole_Callout
+path: .
+train: train.txt

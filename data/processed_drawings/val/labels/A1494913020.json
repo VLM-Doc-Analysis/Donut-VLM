@@ -1,0 +1,26 @@
+{
+  "title_block": {
+    "title": "FLANGE CIRCULAR PLAIN",
+    "Rev": "0",
+    "Drawing_no": "A14-949130-2",
+    "Material": "SUS316L",
+    "Material_std": "SC18NB"
+  },
+  "dimensions": {
+    "outer_diameter": "482",
+    "bore_diameter": "357",
+    "thickness": "24"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "12",
+      "diameter": "25",
+      "pcd": "437"
+    }
+  },
+  "date": "2025-02-28",
+  "notes": [
+    "Burrs to be removed",
+    "Sharp edges to be removed"
+  ]
+}

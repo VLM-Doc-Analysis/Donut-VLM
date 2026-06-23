@@ -1,0 +1,30 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A22-397419-6",
+    "Material": "SS400"
+  },
+  "dimensions": {
+    "outer_diameter": "821",
+    "bore_diameter": "429",
+    "thickness": "22"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "24",
+      "diameter": "26",
+      "pcd": "743"
+    }
+  },
+  "surface_finish": {
+    "general": "6.3",
+    "machined": "12.5"
+  },
+  "date": "2025-04-21",
+  "notes": [
+    "5-2 assembly",
+    "홀 제외 (hole excluded)",
+    "ALL UNTOLERANFED COORDINATE-DIMENSIONS FOR THE BORES ±0.5"
+  ]
+}

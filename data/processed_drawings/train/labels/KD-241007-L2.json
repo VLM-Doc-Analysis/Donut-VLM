@@ -1,0 +1,29 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "5725-1-S / 5728-1-6",
+    "Material": "SS400"
+  },
+  "dimensions": {
+    "outer_diameter": "270",
+    "bore_diameter": "110",
+    "thickness": "26"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "8",
+      "diameter": "18",
+      "pcd": "200"
+    }
+  },
+  "threads": [
+    "M16"
+  ],
+  "date": "2024-10-07",
+  "notes": [
+    "2EA",
+    "5725-1-S / 5728-1-6 assembly",
+    "외경부 공차: 0/-0.5, 0/+0.3"
+  ]
+}

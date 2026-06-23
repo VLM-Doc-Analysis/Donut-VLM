@@ -1,0 +1,29 @@
+{
+  "title_block": {
+    "title": "FLANGE CIRCULAR PLAIN",
+    "Rev": "0",
+    "Drawing_no": "A14-996583-3",
+    "Material": "SUS316L",
+    "Material_std": "SC18N8"
+  },
+  "dimensions": {
+    "outer_diameter": "615",
+    "bore_diameter": "460",
+    "thickness": "24"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "20",
+      "diameter": "26",
+      "pcd": "565"
+    }
+  },
+  "surface_finish": {
+    "general": "6.3"
+  },
+  "date": "2026-03-10",
+  "notes": [
+    "20×U26 Sliced holes",
+    "용접 후 가공 할 것"
+  ]
+}

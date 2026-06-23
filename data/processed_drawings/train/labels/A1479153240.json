@@ -1,0 +1,24 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A14-791532-4",
+    "Material": "SUS316L",
+    "Material_std": "SC2-1986"
+  },
+  "dimensions": {
+    "outer_diameter": "95",
+    "bore_diameter": "14",
+    "thickness": "12",
+    "pilot_od": "23",
+    "mid_diameter": "65"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "14",
+      "pcd": "65"
+    }
+  },
+  "date": "2021-12-13"
+}

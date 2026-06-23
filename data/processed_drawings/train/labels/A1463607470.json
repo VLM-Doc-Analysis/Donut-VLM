@@ -1,0 +1,24 @@
+{
+  "title_block": {
+    "title": "SP.FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A14-636074-7",
+    "Material": "SUS316L",
+    "Material_std": "SC-1986"
+  },
+  "dimensions": {
+    "outer_diameter": "120",
+    "bore_diameter": "34.5",
+    "thickness": "14"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "15",
+      "pcd": "95"
+    }
+  },
+  "surface_finish": {
+    "general": "12.5"
+  }
+}

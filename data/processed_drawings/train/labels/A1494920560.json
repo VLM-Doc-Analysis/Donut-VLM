@@ -1,0 +1,32 @@
+{
+  "title_block": {
+    "title": "FLANGE CIRCULAR PLAIN",
+    "Rev": "0",
+    "Drawing_no": "A14-949205-6",
+    "Material": "SUS316L",
+    "Material_std": "SC18NB"
+  },
+  "dimensions": {
+    "outer_diameter": "1206",
+    "bore_diameter": "78",
+    "thickness": "30",
+    "pcd_outer": "1141",
+    "pcd_inner": "210"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "24",
+      "diameter": "33",
+      "pcd": "1141"
+    },
+    "inner": {
+      "count": "8",
+      "size": "M20",
+      "pcd": "210"
+    }
+  },
+  "threads": [
+    "M20"
+  ],
+  "date": "2025-02-17"
+}

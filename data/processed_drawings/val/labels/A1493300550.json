@@ -1,0 +1,24 @@
+{
+  "title_block": {
+    "title": "FLANGE CIRCULAR PLAIN",
+    "Rev": "0",
+    "Drawing_no": "A14-933005-5",
+    "Material": "SS400"
+  },
+  "dimensions": {
+    "outer_diameter": "120",
+    "bore_diameter": "61.1",
+    "thickness": "14"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "15",
+      "pcd": "95"
+    }
+  },
+  "surface_finish": {
+    "general": "12.5"
+  },
+  "date": "2024-10-22"
+}

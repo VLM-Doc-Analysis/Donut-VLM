@@ -1,0 +1,29 @@
+{
+  "title_block": {
+    "title": "FLANGE (MULTI-PORT ASSEMBLY)",
+    "Rev": "1",
+    "Drawing_no": "BP003345601",
+    "Material": "SUS316L"
+  },
+  "dimensions": {
+    "outer_diameter": "210",
+    "bore_diameter": "102",
+    "thickness": "40"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "8",
+      "diameter": "17",
+      "pcd": "165"
+    }
+  },
+  "notes": [
+    "902-005 1EA",
+    "16-BP003345601",
+    "100A sch40 (4\" pipe size)",
+    "40A sch40s (1-1/2\" pipe size)",
+    "20A sch160s (3/4\" pipe size)",
+    "Yield strength: 200 N/mf min, 515 N/mf min",
+    "Sharp edges to be removed"
+  ]
+}

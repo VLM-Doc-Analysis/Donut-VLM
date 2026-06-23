@@ -1,0 +1,42 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "N/A",
+    "Drawing_no": "A23-369471-3",
+    "LIC_Material": "N/A",
+    "Material": "SS400",
+    "Material_std": "N/A"
+  },
+  "dimensions": {
+    "outer_diameter": "915",
+    "bore_diameter": "871",
+    "thickness": "22"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "20",
+      "diameter": "23",
+      "pcd": "N/A"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
+    }
+  },
+  "surface_finish": {
+    "general": "12.5",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "2025-04-21",
+  "notes": [
+    "3-1-16 assembly, 2EA",
+    "용접 후 HOLE 가공 할 것"
+  ]
+}

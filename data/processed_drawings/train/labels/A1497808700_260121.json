@@ -1,0 +1,37 @@
+{
+  "title_block": {
+    "title": "FLANGE CIRCULAR PLAIN",
+    "Rev": "0",
+    "Drawing_no": "A14-978087-0",
+    "Material": "SUS316LTP",
+    "Material_std": "SC18NB"
+  },
+  "dimensions": {
+    "outer_diameter": "855",
+    "bore_diameter": "50",
+    "thickness": "26",
+    "pcd_outer": "803",
+    "pcd_inner": "210"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "20",
+      "diameter": "27",
+      "pcd": "803"
+    },
+    "inner": {
+      "count": "8",
+      "size": "M20-DP20",
+      "pcd": "210"
+    }
+  },
+  "threads": [
+    "M20"
+  ],
+  "date": "2026-01-21",
+  "notes": [
+    "2-2 assembly",
+    "관통되지 않게 유의할것 (do not penetrate through)",
+    "용접 후 가공 할 것"
+  ]
+}

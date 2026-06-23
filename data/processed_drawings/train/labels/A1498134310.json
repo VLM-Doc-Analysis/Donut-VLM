@@ -1,0 +1,21 @@
+{
+  "title_block": {
+    "title": "S.P FLANGE 10K-20A",
+    "Rev": "0",
+    "Drawing_no": "A14-981343-1",
+    "Material": "SUS316L"
+  },
+  "dimensions": {
+    "outer_diameter": "100",
+    "bore_diameter": "75",
+    "thickness": "14",
+    "pilot_od": "22.5"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "15"
+    }
+  },
+  "date": "2025-10-24"
+}

@@ -1,0 +1,46 @@
+{
+  "title_block": {
+    "title": "FLANGE (SOCKET WELD NECK)",
+    "Rev": "0",
+    "Drawing_no": "BP003343800",
+    "LIC_Material": "N/A",
+    "Material": "SUS316L",
+    "Material_std": "N/A"
+  },
+  "dimensions": {
+    "outer_diameter": "132",
+    "bore_diameter": "60",
+    "thickness": "10",
+    "total_height": "38"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "8",
+      "diameter": "13.5",
+      "pcd": "110"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
+    }
+  },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "2024-10-24",
+  "notes": [
+    "902-004/903-004 1EA",
+    "15-BP003343800",
+    "Sharp edges to be removed",
+    "Weld preparation depend on maker WPS",
+    "Inner bore Ø82/Ø81 visible in section"
+  ]
+}
