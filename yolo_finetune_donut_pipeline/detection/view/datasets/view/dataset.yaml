@@ -1,0 +1,8 @@
+path: /home/pibs17/ilpum/test/datasets/stage1_det
+train: images/train
+val: images/val
+nc: 3
+names:
+- View
+- Title Block
+- Notes
