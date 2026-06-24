@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -106,13 +107,69 @@ def convert(xml_path: Path, images_dir: Path, out_root: Path):
         print(f"  (값(value) 미입력 {n_skipped}개 — Donut 라벨 건너뜀. CVAT 에서 채우면 데이터 늘어남)")
 
 
+def convert_jsonl(jsonl_path: Path, out_root: Path):
+    """이미 **element 단위로 잘라 둔 크롭 + values.jsonl** → Donut 학습쌍.
+
+    CVAT 에서 element 를 잘라 내려받은 export(crop 이미지 + 한 줄당 한 element 인 jsonl)를
+    그대로 쓰는 경로입니다. 크롭이 이미 회전 보정돼 있어 rectify/OBB 단계가 필요 없고,
+    각 줄의 `class`(요소 종류) + `value`(요소값) 만 읽어 `{class: value}` 라벨을 만듭니다.
+
+    jsonl 한 줄 예:
+        {"crop": "crops/1370_..._GD&T.png", "class": "GD&T_FCF", "value": "⊥.001A", ...}
+
+    `crop` 경로는 jsonl 파일 위치 기준 상대경로로 해석합니다. 산출물은 XML 경로와 동일:
+        <out>/images/<crop-stem>.png  ·  <out>/labels/<crop-stem>.json = {"<class>": "<value>"}
+    """
+    img_out = out_root / "images"
+    lbl_out = out_root / "labels"
+    img_out.mkdir(parents=True, exist_ok=True)
+    lbl_out.mkdir(parents=True, exist_ok=True)
+
+    base_dir = jsonl_path.parent
+    n_pairs = n_skipped = n_missing = 0
+    with open(jsonl_path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            row = json.loads(line)
+            label = (row.get("class") or "").strip()
+            value = (row.get("value") or "").strip()
+            if not label or not value:
+                # 값(또는 종류) 미입력 줄은 건너뜀 (빈 라벨 학습 시 Donut 이 "빈 출력"을 배움)
+                n_skipped += 1
+                continue
+            src = base_dir / row["crop"]
+            if not src.exists():
+                print(f"  [skip] 크롭 없음: {row['crop']}")
+                n_missing += 1
+                continue
+            stem = src.stem
+            # 크롭은 이미 정렬돼 있으므로 재가공 없이 그대로 복사 (학습 로더가 RGB 변환)
+            shutil.copyfile(src, img_out / f"{stem}.png")
+            json.dump({label: value}, open(lbl_out / f"{stem}.json", "w", encoding="utf-8"),
+                      ensure_ascii=False)
+            n_pairs += 1
+
+    print(f"element 크롭 {n_pairs}개 생성 → {out_root}")
+    if n_skipped:
+        print(f"  (값/종류 미입력 {n_skipped}개 — Donut 라벨 건너뜀)")
+    if n_missing:
+        print(f"  (크롭 파일 없음 {n_missing}개)")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--xml", required=True, help="CVAT for images 1.1 export XML")
-    ap.add_argument("--images", default="../data/view_crops", help="박스가 그려진 원본(view 크롭) 폴더")
+    src = ap.add_mutually_exclusive_group(required=True)
+    src.add_argument("--xml", help="CVAT for images 1.1 export XML (회전 박스 → rectify 크롭)")
+    src.add_argument("--jsonl", help="이미 잘린 element 크롭 + values.jsonl (rectify 불필요)")
+    ap.add_argument("--images", default="../data/view_crops", help="(--xml 전용) 박스가 그려진 원본(view 크롭) 폴더")
     ap.add_argument("--out", default="../data/elements", help="출력 루트(images/, labels/)")
     a = ap.parse_args()
-    convert(Path(a.xml), Path(a.images), Path(a.out))
+    if a.jsonl:
+        convert_jsonl(Path(a.jsonl), Path(a.out))
+    else:
+        convert(Path(a.xml), Path(a.images), Path(a.out))
 
 
 if __name__ == "__main__":
