@@ -9,7 +9,9 @@ train: images/train
 val: images/val
 
 # 클래스: title_block 은 기존 whole-page Donut 과 역할이 겹칠 수 있으나,
-# 표제란을 분리 검출하면 view 영역과 깔끔히 구분돼 유용. 불필요하면 view 한 클래스만 라벨링.
+# 표제란을 분리 검출하면 view 영역과 깔끔히 구분돼 유용.
+# notes 는 부품/치수 표·주기 블록 영역. (라벨 export 의 dataset.yaml: View/Title Block/Notes 와 동일 순서)
 names:
   0: view
   1: title_block
+  2: notes
