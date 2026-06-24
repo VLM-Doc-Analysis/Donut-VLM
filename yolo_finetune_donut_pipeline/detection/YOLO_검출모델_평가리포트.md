@@ -54,7 +54,9 @@
 
 ## 3. View 모델 (detect)
 
-![View 학습 곡선](view/runs/detect/runs/view/training_curves.png)
+![View 학습 곡선](report_assets/view_training_curves.png)
+
+![View 혼동행렬](report_assets/view_confusion_matrix.png)
 
 ### 최종 수치 (epoch 157)
 
@@ -77,7 +79,9 @@
 
 ## 4. Element 모델 (OBB)
 
-![Element 학습 곡선](element/runs/obb/runs/element/training_curves.png)
+![Element 학습 곡선](report_assets/element_training_curves.png)
+
+![Element 혼동행렬](report_assets/element_confusion_matrix.png)
 
 ### 최종 수치 (epoch 42)
 
@@ -116,10 +120,12 @@
 
 ## 6. 산출물 경로
 
+> 리포트에 임베드된 그래프는 `report_assets/`에 커밋되어 있다(원본은 `runs/`에 생성되며 `runs/`는 gitignore 대상).
+
 | 파일 | 설명 |
 |---|---|
-| `view/runs/detect/runs/view/training_curves.png` | View 모델 loss·P/R·mAP 종합 |
-| `view/runs/detect/runs/view/mAP_curve.png` | View mAP 곡선 (선택) |
-| `element/runs/obb/runs/element/training_curves.png` | Element 모델 loss·P/R·mAP 종합 |
-| `element/runs/obb/runs/element/mAP_curve.png` | Element mAP 곡선 |
-| `*/confusion_matrix.png` | 각 모델 혼동행렬 (background 포함) |
+| `report_assets/view_training_curves.png` | View 모델 loss·P/R·mAP 종합 |
+| `report_assets/view_confusion_matrix.png` | View 혼동행렬 (background 포함) |
+| `report_assets/element_training_curves.png` | Element 모델 loss·P/R·mAP 종합 |
+| `report_assets/element_mAP_curve.png` | Element mAP 곡선 |
+| `report_assets/element_confusion_matrix.png` | Element 혼동행렬 (background 포함) |
