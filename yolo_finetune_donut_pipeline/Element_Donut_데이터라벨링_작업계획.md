@@ -112,7 +112,7 @@ CVAT에서 박스마다: **① 박스 정렬 보정 → ② class 확인 → ③
    - 빈 value / `<unk>` 유발 문자 / class-value 불일치(예: Roughness인데 `Ø…`) 플래그.
    - 표기 규약 위반(Ø vs O, × vs x) 검출.
 2. **소수 클래스 더블체크**: GD&T·Datum·Hole·Section은 **2인 검수**(오류 영향이 큼).
-3. **상태 흐름**: `pending → reviewed`(현재 1,974건 pending도 이 흐름으로 정리).
+3. **상태 흐름**: `pending → reviewed`(현재 1,975건 pending도 이 흐름으로 정리).
 4. **인터-어노테이터 스팟체크**: 무작위 5%를 교차 검수해 규약 합치도 확인.
 
 ---

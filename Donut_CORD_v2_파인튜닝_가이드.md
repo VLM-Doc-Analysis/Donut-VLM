@@ -84,7 +84,7 @@ new_tokens = ["<s_cord-v2>", "<sep/>"] + field_tokens    # task_prompt = "<s_cor
 
 # ── ③ 토크나이저에 등록 ──
 processor.tokenizer.add_special_tokens({"additional_special_tokens": new_tokens})
-processor.tokenizer.add_tokens(list("0123456789"))       # 값 속 숫자는 add_tokens (선택)
+processor.tokenizer.add_tokens(list("0123456789"))       # (요소 노트북에서 사용) 값 속 숫자 토큰화 — 선택
 
 # ── ④ 디코더 임베딩 행렬을 '새 vocab 크기'로 확장 (★ ③과 항상 짝) ──
 model.decoder.resize_token_embeddings(len(processor.tokenizer))
@@ -109,6 +109,12 @@ model.config.pad_token_id           = processor.tokenizer.pad_token_id
 - ④에서 새 임베딩 행은 **랜덤값** → **파인튜닝으로 이 키 토큰들의 의미를 익히는** 것이다.
 - `<s_cord-v2>` 는 **디코더의 시작 토큰**이기도 하다(태스크 지정 + 생성 시작 신호).
 
+> 📌 **이 저장소의 구현 차이**: 위 ①~⑤(라벨에서 키 수집·등록)는 **완전한 방식**으로,
+> `donut_training_drawings.ipynb` · `donut_training_elements.ipynb` 의 `build_model_and_processor` 가 이렇게 한다.
+> 반면 **CORD 레퍼런스 `donut_training.ipynb` 는 더 단순**해서 **task 토큰만** 등록한다
+> (`re.findall(r"<[^>]+>", task_prompt)`) — 필드 토큰은 별도 등록 없이 SentencePiece subword 로 쪼개져 학습된다.
+> **새 도메인을 제대로 이식하려면 위 ①~⑤(키 수집·등록)을 권장**한다.
+
 > 📝 **메모**: 키 토큰은 `add_special_tokens`(이 프로젝트 방식)·`add_tokens` **둘 다 가능**(끝에 `resize_token_embeddings`만 하면 됨). 값 내용(숫자·기호)은 `skip_special_tokens=True`에도 **살아남아야** 하므로 `add_tokens`로 등록한다. — 참고로 공개 CORD-v2 체크포인트는 키 토큰도 `add_tokens`라 `all_special_tokens`엔 안 보인다(둘 다 정상 작동).
 
 ---
@@ -120,8 +126,8 @@ class DonutDataset:
     def __getitem__(self, idx):
         pixel_values = processor(image, return_tensors="pt").pixel_values   # 이미지 전처리
         target = task_prompt + json2token(gt_parse) + eos
-        labels = tokenizer(target, max_length=512, padding="max_length",
-                           truncation=True).input_ids
+        labels = tokenizer(target, add_special_tokens=False, max_length=512,
+                           padding="max_length", truncation=True).input_ids
         labels[labels == pad_token_id] = -100    # ★ 패딩 위치는 loss 에서 제외
         return {"pixel_values": pixel_values, "labels": labels}
 ```
@@ -142,14 +148,14 @@ class DonutDataset:
 | `num_epochs` | 30 | 전체 반복 횟수 |
 | `batch_size × grad_accum` | **2 × 8 = 16** | 유효 배치 (VRAM 부족 시 batch↓·accum↑) |
 | `learning_rate` / `warmup` | 3e-5 / 300 | |
-| 정밀도 | fp16(원본) → **bf16 권장** | ⚠️ 아래 주의 |
+| `fp16`/`bf16` | CORD 원본 `fp16=True` · **커스텀 도메인(도면·요소)은 `bf16` 권장** | ⚠️ 아래 주의 |
 
 ```python
 args = Seq2SeqTrainingArguments(
     output_dir="checkpoints", num_train_epochs=30,
     per_device_train_batch_size=2, gradient_accumulation_steps=8,
     learning_rate=3e-5, warmup_steps=300, weight_decay=0.01,
-    bf16=True,                          # ← 권장 (fp16 대신)
+    fp16=True,                          # CORD 원본 설정 (커스텀 도메인은 bf16=True 권장 — drawings/elements)
     eval_strategy="steps", eval_steps=1000, save_steps=1000,
     save_total_limit=3, load_best_model_at_end=True,
     metric_for_best_model="eval_loss", greater_is_better=False,
@@ -189,7 +195,8 @@ out = model.generate(pixel_values, decoder_input_ids=dec,
 seq    = proc.batch_decode(out)[0]
 result = token2json(seq)     # → {"menu":{...}, "total":{...}}
 ```
-(이게 `donut_CORD_v2_fine_tunned_test.ipynb` 의 추론 흐름)
+(추론 흐름은 `donut_CORD_v2_fine_tunned_test.ipynb` 참고 — 그 노트북은 **공개 체크포인트**를 로드해 데모하며,
+태스크 토큰 제거를 `re.sub(r"<.*?>", "", seq, count=1)` 로 한다. 위는 직접 학습한 `checkpoints/final` 을 쓰는 형태)
 
 ---
 
