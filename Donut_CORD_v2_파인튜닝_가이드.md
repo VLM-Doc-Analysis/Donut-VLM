@@ -284,9 +284,18 @@ Donut 학습 기계는 **도메인을 모른다.** 하는 일은 늘 똑같다:
 
 // 도면(예)
 { "title_block": {"part_no":"A-1370","material":"SS400"},
-  "dimensions": [ {"value":"Ø65"}, {"value":"R15"} ] }
+  "dimensions": [ {"nominalValue":"Ø65","upperLimit":"+0.1","lowerLimit":"-0.1"},
+                  {"nominalValue":"R15"} ] }   // 방식 A: 기호를 nominalValue 에 유지 (요소 parse_to_schema 와 동일)
 ```
-→ 학습 시작 때 이 라벨들에서 키(`title_block`,`part_no`,`dimensions`,`value` …)를 모아 토큰으로 등록한다.
+
+> **방식 B (더 granular)** — 피처 종류까지 분리해 다운스트림(CAD/검사 DB)에 더 유리:
+> ```jsonc
+> "dimensions": [ {"feature":"diameter","nominalValue":"65","upperLimit":"+0.1","lowerLimit":"-0.1"},
+>                 {"feature":"radius","nominalValue":"15"} ]
+> ```
+> 필드를 더 쪼갤수록 **정확·검증성↑, 라벨링 비용↑**. 둘 다 통짜 `{"value":…}` 보다 낫다.
+
+→ 학습 시작 때 이 라벨들에서 키(`title_block`,`part_no`,`dimensions`,`nominalValue`,`upperLimit`,`feature` …)를 모아 토큰으로 등록한다.
 **스키마에 쓴 키 = 라벨에 실제로 있는 키** 여야 한다(없으면 모델이 못 뱉음).
 
 ### 안 바꾸는 것 (그대로 재사용)
