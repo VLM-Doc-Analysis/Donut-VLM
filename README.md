@@ -81,7 +81,8 @@ CVAT element 라벨링(`value` 속성 정의 → export → 변환)은
 
 | 문서 | 내용 |
 |---|---|
-| [`Donut_CORD_v2_파인튜닝_가이드.md`](Donut_CORD_v2_파인튜닝_가이드.md) | donut-base → CORD-v2 파인튜닝 전 과정(토큰 변환·특수토큰 등록·Teacher Forcing·CFG·추론). **다른 태스크 이식법** 포함 |
+| [`Donut_CORD_v2_파인튜닝_가이드.md`](Donut_CORD_v2_파인튜닝_가이드.md) | donut-base → CORD-v2 파인튜닝 전 과정(토큰 변환·특수토큰 등록·Teacher Forcing·CFG·추론). **다른 태스크 이식법** 포함 (절차편) |
+| [`Donut_파인튜닝_학습메커니즘_가이드.md`](Donut_파인튜닝_학습메커니즘_가이드.md) | 학습이 "이미지→JSON 토큰열" 매핑을 **어떻게** 만드나 (원리편): Teacher Forcing·Loss·cross-attention 정렬·노출편향·추론 흐름 |
 | [`CORD_v2_토큰_종류_가이드.md`](CORD_v2_토큰_종류_가이드.md) | Donut이 출력하는 토큰 종류(구조/특수 + 필드) — 실제 영수증 예시로 토큰열→JSON |
 | [`Element_Donut_구조화스키마_수작업annotation_가이드.md`](yolo_finetune_donut_pipeline/Element_Donut_구조화스키마_수작업annotation_가이드.md) | 값을 의미 필드로 분해하는 구조화 스키마(질 레버) + 기호 표현(토크나이저) |
 | [`Element_Donut_토크나이저_기호추가_가이드.md`](yolo_finetune_donut_pipeline/Element_Donut_토크나이저_기호추가_가이드.md) | 공학 기호(Ø·⊥·± …) 토큰 추가 절차·NFKC 함정 |
