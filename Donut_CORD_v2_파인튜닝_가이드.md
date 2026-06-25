@@ -166,7 +166,7 @@ result = token2json(seq)     # → {"menu":{...}, "total":{...}}
 | # | 규칙 | 안 지키면 |
 |---|---|---|
 | 1 | **필드 토큰 등록 필수** — 라벨에 등장하는 모든 키를 토크나이저 vocab에 등록(`add_special_tokens` 또는 `add_tokens`) 후 `resize_token_embeddings` | vocab에 없는 키는 디코더가 생성하지 못함 |
-| 2 | **task token ≠ 필드명** (`<s_cord-v2>` vs `menu` 분리) | 토큰 충돌 |
+| 2 | **task 이름 ≠ 어떤 JSON 키 이름** — 둘 다 `<s_이름>` 토큰이라 다른 이름으로 분리(예: task `<s_cord-v2>` ↔ 필드 `menu`). 자세히는 §10 | 같은 토큰으로 충돌 → task 제거 시 필드 여는 태그까지 삭제돼 파싱 깨짐(점수 0) |
 | 3 | **`bf16` 권장, `fp16` 주의** (fp16은 Donut에서 수치 불안정 → 깨진 출력) | 0점/깨진 출력 |
 | 4 | **`token2json` 전 BOS·task 토큰 제거** | 정규식 파싱 깨져 점수 0 |
 
