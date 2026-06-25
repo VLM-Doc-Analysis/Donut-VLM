@@ -26,11 +26,13 @@ CORD-v2(영수증)를 예로 들지만, 도면/요소 태스크에도 그대로 
 
 ```
 gt_parse: {"menu":{"nm":"치킨","price":"12000"}, "total":{"total_price":"12000"}}
-   │ json2token
+   │ json2token  (키를 역정렬: top은 total>menu, menu 안은 price>nm)
    ▼
-target = <s_cord-v2> <s_menu><s_nm>치킨</s_nm><s_price>12000</s_price></s_menu><s_total><s_total_price>12000</s_total_price></s_total> </s>
-         └ task ┘                          └────────── 정답 본문 ──────────┘                                        └ eos ┘
+target = <s_cord-v2> <s_total><s_total_price>12000</s_total_price></s_total><s_menu><s_price>12000</s_price><s_nm>치킨</s_nm></s_menu> </s>
+         └ task ┘    └──────────────────── 정답 본문 (키는 역정렬) ────────────────────┘                       └ eos ┘
 ```
+
+> ※ 토큰 **순서**는 `json2token` 이 키를 **역정렬(`sorted(reverse=True)`)** 해 결정한다 — 그래서 `total` 이 `menu` 보다, `price` 가 `nm` 보다 앞에 온다(결정적 순서 보장).
 
 모델의 목표: 이미지를 보고 이 토큰열을 만들어내는 것.
 
@@ -46,13 +48,17 @@ target = <s_cord-v2> <s_menu><s_nm>치킨</s_nm><s_price>12000</s_price></s_menu
 
 | 지금까지 준 정답 토큰 | 맞혀야 할 다음 토큰 |
 |---|---|
-| `<s_cord-v2>` | `<s_menu>` |
-| `<s_cord-v2><s_menu>` | `<s_nm>` |
+| `<s_cord-v2>` | `<s_total>` |
+| `…<s_total>` | `<s_total_price>` |
+| `…</s_total>` | `<s_menu>` |
+| `…<s_menu>` | `<s_price>` |
+| `…<s_price>12000</s_price>` | `<s_nm>` |
 | `…<s_nm>` | `치` |
 | `…<s_nm>치` | `킨` |
 | `…치킨` | `</s_nm>` |
-| `…</s_nm>` | `<s_price>` |
 | … | … `</s>`(끝) |
+
+> (순서는 §1 처럼 키 역정렬을 따른다 — `total` → `menu`, `menu` 안에서 `price` → `nm`.)
 
 > 직관: 받아쓰기인데 틀려도 **정답 줄을 보여주며** 다음 글자를 묻는다. 그래서 한 글자 틀려도 뒤가 무너지지 않고, **모든 위치를 한 번에 병렬 채점**할 수 있어 학습이 빠르고 안정적이다.
 
