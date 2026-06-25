@@ -59,22 +59,54 @@ target = task_prompt("<s_cord-v2>") + json2token(gt_parse) + eos("</s>")
 
 ## 3. 특수 토큰 등록 ⭐ (가장 중요 — 빠뜨리면 안 됨)
 
-디코더는 **vocab에 있는 토큰만** 생성할 수 있다. 그래서 학습 전에 반드시:
+디코더는 **vocab에 있는 토큰만** 생성할 수 있다. 그래서 학습 전에 **라벨의 키들을 토큰으로 등록**해야 한다. 아래 **5단계**:
 
 ```python
-# ① task token + 라벨에 등장하는 모든 필드 토큰 수집
-new_tokens = ["<s_cord-v2>", "<s_menu>","</s_menu>", "<s_nm>","</s_nm>", ...]
-processor.tokenizer.add_special_tokens({"additional_special_tokens": new_tokens})
+# ── ① 모든 라벨 JSON 에서 '키' 전부 수집 (템플릿 아님, 실제 라벨 기준) ──
+def collect_keys(obj, out):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            out.add(k)             # 키 등록
+            collect_keys(v, out)   # 값도 재귀(중첩 dict 대비)
+    elif isinstance(obj, list):
+        for v in obj:
+            collect_keys(v, out)
 
-# ② 디코더 임베딩 행렬을 늘어난 vocab 크기에 맞춰 리사이즈
+keys = set()
+for label in all_train_and_val_labels:    # train+val 라벨 전부 훑기
+    collect_keys(label, keys)              # 예: {"menu","nm","price","total", ...}
+
+# ── ② 키마다 '여는/닫는' 토큰 + task + 리스트 구분자 만들기 ──
+field_tokens = []
+for k in sorted(keys):
+    field_tokens += [f"<s_{k}>", f"</s_{k}>"]            # ★ 여는·닫는 둘 다!
+new_tokens = ["<s_cord-v2>", "<sep/>"] + field_tokens    # task_prompt = "<s_cord-v2>"
+
+# ── ③ 토크나이저에 등록 ──
+processor.tokenizer.add_special_tokens({"additional_special_tokens": new_tokens})
+processor.tokenizer.add_tokens(list("0123456789"))       # 값 속 숫자는 add_tokens (선택)
+
+# ── ④ 디코더 임베딩 행렬을 '새 vocab 크기'로 확장 (★ ③과 항상 짝) ──
 model.decoder.resize_token_embeddings(len(processor.tokenizer))
 
-# ③ 시작/패딩 토큰 연결
-model.config.decoder_start_token_id = tokenizer.convert_tokens_to_ids("<s_cord-v2>")
-model.config.pad_token_id           = tokenizer.pad_token_id
+# ── ⑤ 시작/패딩 토큰 연결 ──
+model.config.decoder_start_token_id = processor.tokenizer.convert_tokens_to_ids("<s_cord-v2>")
+model.config.pad_token_id           = processor.tokenizer.pad_token_id
 ```
 
+**각 단계가 왜 필요한가**
+
+| 단계 | 하는 일 | 빠뜨리면 |
+|---|---|---|
+| ① 키 수집 | **실제 라벨**에서 키를 모음(템플릿 X) | 라벨에 있는데 등록 안 된 키 → 모델이 못 뱉음 |
+| ② 토큰 생성 | 키 1개 → `<s_k>` + `</s_k>` **2개** | 닫는 태그 누락 → `token2json` 파싱 깨짐 |
+| ③ 등록 | 토크나이저 vocab에 추가 | 모델이 그 토큰 자체를 모름 |
+| ④ resize | 임베딩에 **새 토큰용 행 추가**(랜덤 초기화) | 새 토큰 id가 임베딩 범위 밖 → **에러** |
+| ⑤ 연결 | task=시작토큰, pad 지정 | 생성 시작·패딩 처리 안 됨 |
+
+- **③ `add_special_tokens` + ④ `resize_token_embeddings` 는 항상 짝** — 토큰만 추가하고 임베딩을 안 늘리면 `index out of range` 에러.
 - **필드 토큰은 템플릿이 아니라 '실제 라벨'에서 수집** — 라벨에 없는 키는 모델이 못 뱉는다.
+- ④에서 새 임베딩 행은 **랜덤값** → **파인튜닝으로 이 키 토큰들의 의미를 익히는** 것이다.
 - `<s_cord-v2>` 는 **디코더의 시작 토큰**이기도 하다(태스크 지정 + 생성 시작 신호).
 
 > 📝 **메모**: 키 토큰은 `add_special_tokens`(이 프로젝트 방식)·`add_tokens` **둘 다 가능**(끝에 `resize_token_embeddings`만 하면 됨). 값 내용(숫자·기호)은 `skip_special_tokens=True`에도 **살아남아야** 하므로 `add_tokens`로 등록한다. — 참고로 공개 CORD-v2 체크포인트는 키 토큰도 `add_tokens`라 `all_special_tokens`엔 안 보인다(둘 다 정상 작동).
