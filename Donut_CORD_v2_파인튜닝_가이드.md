@@ -165,7 +165,7 @@ result = token2json(seq)     # → {"menu":{...}, "total":{...}}
 
 | # | 규칙 | 안 지키면 |
 |---|---|---|
-| 1 | **필드 토큰 등록 필수** (실제 라벨의 모든 키 → `add_special_tokens` → `resize_token_embeddings`) | 디코더가 키를 못 만듦 |
+| 1 | **필드 토큰 등록 필수** — 라벨에 등장하는 모든 키를 토크나이저 vocab에 등록(`add_special_tokens` 또는 `add_tokens`) 후 `resize_token_embeddings` | vocab에 없는 키는 디코더가 생성하지 못함 |
 | 2 | **task token ≠ 필드명** (`<s_cord-v2>` vs `menu` 분리) | 토큰 충돌 |
 | 3 | **`bf16` 권장, `fp16` 주의** (fp16은 Donut에서 수치 불안정 → 깨진 출력) | 0점/깨진 출력 |
 | 4 | **`token2json` 전 BOS·task 토큰 제거** | 정규식 파싱 깨져 점수 0 |
