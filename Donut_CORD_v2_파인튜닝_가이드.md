@@ -276,27 +276,33 @@ Donut 학습 기계는 **도메인을 모른다.** 하는 일은 늘 똑같다:
 
 ### 바꿀 것 ③ — 라벨 JSON 스키마 (어떤 키/구조로 뽑을지)
 
-내 도메인 정답 JSON 구조를 정의한다. 이게 곧 **모델이 배울 필드 토큰**이 된다.
+내 도메인의 정답 JSON 구조를 정한다. **이 JSON의 키가 곧 모델이 배울 필드 토큰**이 된다.
+
+#### 핵심 — 값을 "얼마나 잘게 쪼개 적느냐"가 정확도를 가른다
+
+같은 치수 `Ø65 ±0.1` 을 세 가지로 적을 수 있다:
+
+| 단계 | 어떻게 적나 | 결과 |
+|---|---|---|
+| ❌ **통짜** | `{"value":"Ø65 ±0.1"}` | 한 글자만 틀려도 0점, 다운스트림서 또 파싱해야 함 |
+| ✅ **방식 A** | `{"nominalValue":"Ø65","upperLimit":"+0.1","lowerLimit":"-0.1"}` | 필드별 **부분점수** (요소 `parse_to_schema` 와 동일) |
+| ✅✅ **방식 B** | `{"feature":"diameter","nominalValue":"65","upperLimit":"+0.1","lowerLimit":"-0.1"}` | 피처 종류까지 분리 → **CAD/검사 DB 바로 연동** |
+
+> 잘게 쪼갤수록 **정확·검증성 ↑**, 대신 **라벨링 비용 ↑**. A·B 중 택1 — **둘 다 통짜보다 낫다.**
+
+#### 전체 문서 예시
 
 ```jsonc
-// CORD-v2
+// CORD-v2 (영수증)
 { "menu": {"nm":"치킨","price":"12000"}, "total": {"total_price":"12000"} }
 
-// 도면(예)
+// 도면 (방식 A)
 { "title_block": {"part_no":"A-1370","material":"SS400"},
   "dimensions": [ {"nominalValue":"Ø65","upperLimit":"+0.1","lowerLimit":"-0.1"},
-                  {"nominalValue":"R15"} ] }   // 방식 A: 기호를 nominalValue 에 유지 (요소 parse_to_schema 와 동일)
+                  {"nominalValue":"R15"} ] }
 ```
 
-> **방식 B (더 granular)** — 피처 종류까지 분리해 다운스트림(CAD/검사 DB)에 더 유리:
-> ```jsonc
-> "dimensions": [ {"feature":"diameter","nominalValue":"65","upperLimit":"+0.1","lowerLimit":"-0.1"},
->                 {"feature":"radius","nominalValue":"15"} ]
-> ```
-> 필드를 더 쪼갤수록 **정확·검증성↑, 라벨링 비용↑**. 둘 다 통짜 `{"value":…}` 보다 낫다.
-
-→ 학습 시작 때 이 라벨들에서 키(`title_block`,`part_no`,`dimensions`,`nominalValue`,`upperLimit`,`feature` …)를 모아 토큰으로 등록한다.
-**스키마에 쓴 키 = 라벨에 실제로 있는 키** 여야 한다(없으면 모델이 못 뱉음).
+> ⚠️ **스키마의 키 = 라벨에 실제로 있는 키.** 학습 시작 때 이 라벨들에서 키(`title_block`,`nominalValue`,`upperLimit`,`feature` …)를 모아 토큰으로 등록하므로, **라벨에 없는 키는 모델이 못 뱉는다.**
 
 ### 안 바꾸는 것 (그대로 재사용)
 
