@@ -188,18 +188,97 @@ Step 6  추론으로 확인  (generate → token2json)
 
 ---
 
-## 10. 다른 태스크로 이식하기
+## 10. 다른 태스크로 이식하기 (영수증 → 내 도메인)
 
-이 파이프라인을 **다른 도메인**으로 옮길 때 바꿀 것은 **단 3가지**뿐이다:
+### 왜 "3가지만" 바꾸면 되나
 
-| 바꾸는 것 | CORD-v2 | 예: 도면 |
+Donut 학습 기계는 **도메인을 모른다.** 하는 일은 늘 똑같다:
+
+```
+이미지 → (인코더) 특징 → (디코더) <s_키>값</s_키> 토큰열 → token2json → JSON
+```
+
+`json2token` / 토큰 등록 / Teacher Forcing / Trainer / 평가는 **키가 `menu`든 `dimension`이든 상관없이** 똑같이 작동한다.
+그래서 바꾸는 건 **"무엇을 읽을지"** 세 가지뿐이다.
+
+### 바꿀 것 ① — 데이터셋 (어떤 이미지+정답으로 배울지)
+
+| | CORD-v2 (HF) | 내 도메인 (로컬) |
 |---|---|---|
-| 데이터셋 | `naver-clova-ix/cord-v2` | 로컬 도면 크롭+라벨 |
-| `task_prompt` (새 토큰) | `<s_cord-v2>` | `<s_drawing>` / `<s_element>` |
-| 라벨 JSON 스키마 | `menu/total/...` | `title_block` / `dimension/...` |
+| `data.dataset_name` | `"naver-clova-ix/cord-v2"` | **`None`** |
+| 데이터 위치 | 자동 다운로드 | `local_train_dir` / `local_val_dir` 지정 |
 
-나머지(`json2token`, 토큰 등록, Teacher Forcing, Trainer, 평가)는 **그대로**.
-→ 실제로 `donut_training_drawings.ipynb` · `donut_training_elements.ipynb` 가 이 방식으로 이식한 것이다.
+```python
+"data": {
+    "dataset_name": None,                               # ← HF 대신 로컬 모드
+    "local_train_dir": "data/processed_drawings/train",
+    "local_val_dir":   "data/processed_drawings/val",
+}
+```
+- 로컬 포맷: `<root>/images/*.png` + `<root>/labels/<같은이름>.json` (stem이 맞는 쌍만 사용).
+- `DonutDataset`이 **HF/로컬 모드를 자동 감지**하므로 코드는 안 고쳐도 된다.
+
+### 바꿀 것 ② — `task_prompt` (무슨 과제인지 알리는 새 시작 토큰)
+
+```python
+"task_prompt": "<s_drawing>",   # CORD: <s_cord-v2> → 도면: <s_drawing> (요소: <s_element>)
+"max_length": 768,              # JSON 길이에 맞게 (도면 768, 요소 128, ≤768 상한)
+```
+- 이 토큰은 **새로 만든 것**이라 토크나이저에 등록돼야 한다 — §3의 `add_special_tokens`가 자동 처리.
+- ⚠️ **task token ≠ 최상위 필드명.** 도면은 task=`<s_drawing>`, 최상위 필드=`title_block`으로 **분리**(충돌 방지).
+- 추론할 때도 **같은 새 토큰**을 디코더 시작으로 줘야 한다.
+
+### 바꿀 것 ③ — 라벨 JSON 스키마 (어떤 키/구조로 뽑을지)
+
+내 도메인 정답 JSON 구조를 정의한다. 이게 곧 **모델이 배울 필드 토큰**이 된다.
+
+```jsonc
+// CORD-v2
+{ "menu": {"nm":"치킨","price":"12000"}, "total": {"total_price":"12000"} }
+
+// 도면(예)
+{ "title_block": {"part_no":"A-1370","material":"SS400"},
+  "dimensions": [ {"value":"Ø65"}, {"value":"R15"} ] }
+```
+→ 학습 시작 때 이 라벨들에서 키(`title_block`,`part_no`,`dimensions`,`value` …)를 모아 토큰으로 등록한다.
+**스키마에 쓴 키 = 라벨에 실제로 있는 키** 여야 한다(없으면 모델이 못 뱉음).
+
+### 안 바꾸는 것 (그대로 재사용)
+
+| 그대로 | 역할 |
+|---|---|
+| `json2token` / `token2json` | JSON ↔ 토큰 변환 |
+| `build_model_and_processor` | 라벨에서 키 수집 → 토큰 등록 → 임베딩 리사이즈 |
+| `DonutDataset` | target = `task + json2token(gt) + eos`, pad→`-100` |
+| `Seq2SeqTrainer` 설정 | 학습 루프 |
+| `compute_leaf_match` / field-F1 | 평가 |
+
+### 이식 체크리스트
+
+- [ ] 데이터를 `images/*.png` + `labels/*.json`(같은 stem)로 준비
+- [ ] `CFG.data.dataset_name=None` + `local_train_dir`/`local_val_dir` 지정
+- [ ] `CFG.data.task_prompt`를 **새 토큰**으로 (예 `<s_drawing>`)
+- [ ] `CFG.model.max_length`를 JSON 길이에 맞게 (≤768)
+- [ ] 라벨 JSON 스키마 확정 — **최상위 필드명 ≠ task token**
+- [ ] 학습 → `checkpoints_<도메인>/final` 에 모델+프로세서 저장
+- [ ] 추론 시 task_prompt를 **같은 새 토큰**으로
+
+### 실수하기 쉬운 점 (gotcha)
+
+1. **task_prompt만 바꾸고 추론에선 옛 토큰 사용** → 디코더 시작이 안 맞아 출력이 깨진다.
+2. **task token = 필드명** 으로 둠 → 토큰 충돌.
+3. **라벨에 없는 키를 스키마에 기대** → 등록 안 돼 못 뱉음.
+4. **fp16 사용** → 커스텀 도메인에서 수치 불안정. **bf16 권장.**
+5. **max_length 768 초과** → 디코더 위치임베딩 한계로 뒤가 잘림.
+6. **`token2json` 전 BOS·새 task 토큰 미제거** → 정규식 파싱이 깨져 점수 0.
+
+### 실제 사례 (이 저장소 — 같은 기계에 3가지만 바꿔 끼움)
+
+| 노트북 | task_prompt | max_length | 데이터 | 스키마 |
+|---|---|---|---|---|
+| `donut_training.ipynb` | `<s_cord-v2>` | 512 | HF cord-v2 | `menu`/`total`… |
+| `donut_training_drawings.ipynb` | `<s_drawing>` | 768 | 로컬 도면 | `title_block`/`dimensions`… |
+| `donut_training_elements.ipynb` | `<s_element>` | 128 | 로컬 요소 크롭 | `dimension`/`gdt`… (구조화) |
 
 ---
 
