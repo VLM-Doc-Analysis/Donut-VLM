@@ -8,6 +8,13 @@ runs/
 # detection/**/runs/
 # *.pt
 
+# 실험 부산물 (3/6클래스 비교 등 일회성 산출 — 재생성 가능, 커밋 안 함)
+checkpoints_elements_3cls/
+checkpoints_elements_all/
+data/processed_elements_3cls/
+data/processed_elements_all/
+data/_pipeline_tmp/
+
 # Dataset cache
 # data/
 
