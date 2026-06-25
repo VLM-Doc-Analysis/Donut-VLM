@@ -94,6 +94,7 @@ CVAT element 라벨링(`value` 속성 정의 → export → 변환)은
 | [`PLAN.md`](yolo_finetune_donut_pipeline/PLAN.md) | YOLO→Donut 파이프라인 단계별 계획(전체 설계) |
 | [`SETUP_GUIDE.md`](yolo_finetune_donut_pipeline/SETUP_GUIDE.md) | 환경 셋업(PDF 래스터화·CVAT·학습) |
 | [`CVAT_LABELING_GUIDE.md`](yolo_finetune_donut_pipeline/CVAT_LABELING_GUIDE.md) | CVAT 라벨링 조작법(`value` 속성 → export → 변환) |
+| [`CVAT_GroundTruth_조립_가이드.md`](yolo_finetune_donut_pipeline/CVAT_GroundTruth_조립_가이드.md) | CVAT 평면 라벨(박스+속성) → `gt_parse` 같은 **구조화 JSON 조립** 개념·매핑·중첩 처리 |
 | [`Element_Donut_데이터라벨링_작업계획.md`](yolo_finetune_donut_pipeline/Element_Donut_데이터라벨링_작업계획.md) | 실 라벨 ≥1만 확충(양 레버) — 소싱·모델보조·배치·QA·일정 |
 
 ### 3) 분석·평가 리포트 — "지금 어디에 있나"
