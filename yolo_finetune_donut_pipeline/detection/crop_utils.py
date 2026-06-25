@@ -69,14 +69,24 @@ def crop_aabb(image, xyxy, pad: int = 0) -> Image.Image:
 # OBB (회전) 정렬 크롭 — Element 검출 결과용
 # ──────────────────────────────────────────────────────────────────────────
 def _order_quad(pts: np.ndarray) -> np.ndarray:
-    """4점을 [좌상, 우상, 우하, 좌하] 순서로 정렬."""
+    """4점을 [좌상, 우상, 우하, 좌하] 순서로 정렬.
+
+    중심 기준 각도로 정렬해 회전 순서를 잡은 뒤(축정렬·45° 박스에서도 안전), 시계방향으로
+    통일하고 좌상(x+y 최소)을 시작점으로 회전한다.
+    (예전의 sum/diff 휴리스틱은 축정렬·대각 박스에서 같은 점이 두 코너에 중복 선택돼
+     사각형이 붕괴하고 warp 가 깨지는 버그가 있었음.)
+    """
     pts = np.asarray(pts, dtype=np.float32).reshape(4, 2)
-    s = pts.sum(axis=1)
-    d = np.diff(pts, axis=1).ravel()
-    return np.array(
-        [pts[np.argmin(s)], pts[np.argmin(d)], pts[np.argmax(s)], pts[np.argmax(d)]],
-        dtype=np.float32,
-    )
+    c = pts.mean(axis=0)
+    ang = np.arctan2(pts[:, 1] - c[1], pts[:, 0] - c[0])
+    pts = pts[np.argsort(ang)]                      # 회전 순서로 정렬 (CW/CCW 중 하나)
+    # 신발끈 부호로 시계방향(이미지 y-down 좌표계에서 [TL,TR,BR,BL] 은 양수) 통일
+    x, y = pts[:, 0], pts[:, 1]
+    area = float(np.dot(x, np.roll(y, -1)) - np.dot(np.roll(x, -1), y))
+    if area < 0:
+        pts = pts[::-1]
+    start = int(np.argmin(pts.sum(axis=1)))         # 좌상 = x+y 최소
+    return np.roll(pts, -start, axis=0).astype(np.float32)
 
 
 def rectify_obb(image, quad, pad: int = 2, min_side: int = 8) -> Image.Image:
@@ -84,6 +94,11 @@ def rectify_obb(image, quad, pad: int = 2, min_side: int = 8) -> Image.Image:
 
     quad: [[x1,y1],[x2,y2],[x3,y3],[x4,y4]] 또는 길이 8 시퀀스 (픽셀 좌표).
     회전 박스의 긴 변이 가로가 되도록(가로폭 >= 세로높이) 필요 시 90° 회전.
+
+    ⚠️ 한계: OBB 는 박스의 각도만 줄 뿐 글자의 읽기 방향(상/하)을 알려주지 않으므로, 세로로
+       긴 크롭은 90° 눕힐 때 위아래(180°)가 뒤집힐 수 있습니다. 학습(cvat_to_donut)·추론이
+       **이 동일 함수**를 써서 형태는 일치하므로 모델은 일관되게 학습되지만, 세로 텍스트의
+       180° 모호성 자체는 여기서 해소되지 않습니다(필요 시 글자 방향 분류기 등 별도 단계 필요).
     """
     bgr = load_bgr(image)
     quad = np.asarray(quad, dtype=np.float32).reshape(4, 2)
@@ -135,8 +150,12 @@ def save_crops_from_result(result, out_dir, stem, names=None, pad=2):
         clss = obb.cls.cpu().numpy().astype(int)
         confs = obb.conf.cpu().numpy()
         for i, (poly, c, cf) in enumerate(zip(polys, clss, confs)):
-            crop = rectify_obb(img, poly, pad=pad)
             name = names.get(int(c), str(int(c)))
+            try:                                   # 퇴화 박스 1개가 페이지 전체를 중단시키지 않도록
+                crop = rectify_obb(img, poly, pad=pad)
+            except (ValueError, cv2.error) as ex:
+                print(f"  [skip] {stem}__{i:03d}__{name}: {ex}")
+                continue
             p = out_dir / f"{stem}__{i:03d}__{name}.png"
             crop.save(p)
             meta.append({"path": str(p), "cls": int(c), "name": name,
@@ -149,8 +168,12 @@ def save_crops_from_result(result, out_dir, stem, names=None, pad=2):
         clss = boxes.cls.cpu().numpy().astype(int)
         confs = boxes.conf.cpu().numpy()
         for i, (b, c, cf) in enumerate(zip(xyxy, clss, confs)):
-            crop = crop_aabb(img, b, pad=pad)
             name = names.get(int(c), str(int(c)))
+            try:                                   # 경계 퇴화 크롭은 건너뛰고 계속
+                crop = crop_aabb(img, b, pad=pad)
+            except (ValueError, cv2.error) as ex:
+                print(f"  [skip] {stem}__{i:03d}__{name}: {ex}")
+                continue
             p = out_dir / f"{stem}__{i:03d}__{name}.png"
             crop.save(p)
             meta.append({"path": str(p), "cls": int(c), "name": name,

@@ -31,10 +31,13 @@ Donut(transformers/torch) 의존성이 **모두 설치돼 있어 커널 전환·
 
 ## 클래스 정의
 
-| 검출기 | 박스 타입 | 클래스 |
+| 검출기 | 박스 타입 | 클래스 (실제 YAML 기준) |
 |---|---|---|
-| 뷰 (`view.yaml`) | AABB (축정렬 사각형) | `0:view`, `1:title_block` |
-| 요소 (`element.yaml`) | OBB (회전 사각형, 4점) | `0:dimension` 치수, `1:tolerance` 공차, `2:gdt` 기하공차, `3:roughness` 거칠기 |
+| 뷰 (`view.yaml`) | AABB (축정렬 사각형) | `0:view`, `1:title_block`, `2:notes` |
+| 요소 (`element.yaml`) | OBB (회전 사각형, 4점) | `0:Dimension` 치수, `1:GD&T_FCF` 기하공차 FCF, `2:Datum` 데이텀, `3:Surface_Roughness` 거칠기, `4:Section` 단면, `5:Hole_Callout` 홀 콜아웃 |
+
+> 클래스명은 `detection/{view,element}.yaml` 이 단일 진실원본(source of truth). 위 표는 그에 맞춰 동기화됨.
+> (Donut 학습 `parse_to_schema` 는 이 클래스명 문자열을 그대로 분기 키로 쓰므로 변경 시 양쪽을 함께 수정.)
 
 ## 단계별 계획
 
