@@ -71,3 +71,37 @@ CVAT element 라벨링(`value` 속성 정의 → export → 변환)은
 
 `donut_training.ipynb`(영수증 CORD-v2 원본 파이프라인)와 `donut_CORD_*_test.ipynb`(추론 데모)는
 도면 파인튜닝의 출발점이 된 레퍼런스 노트북입니다.
+
+---
+
+## 📚 문서 목록 (가이드 인덱스)
+
+### 1) 개념·학습 가이드 — "어떻게 동작하나"
+
+| 문서 | 내용 |
+|---|---|
+| [`Donut_CORD_v2_파인튜닝_가이드.md`](Donut_CORD_v2_파인튜닝_가이드.md) | donut-base → CORD-v2 파인튜닝 전 과정(토큰 변환·특수토큰 등록·Teacher Forcing·CFG·추론). **다른 태스크 이식법** 포함 |
+| [`CORD_v2_토큰_종류_가이드.md`](CORD_v2_토큰_종류_가이드.md) | Donut이 출력하는 토큰 종류(구조/특수 + 필드) — 실제 영수증 예시로 토큰열→JSON |
+| [`Element_Donut_구조화스키마_수작업annotation_가이드.md`](yolo_finetune_donut_pipeline/Element_Donut_구조화스키마_수작업annotation_가이드.md) | 값을 의미 필드로 분해하는 구조화 스키마(질 레버) + 기호 표현(토크나이저) |
+| [`Element_Donut_토크나이저_기호추가_가이드.md`](yolo_finetune_donut_pipeline/Element_Donut_토크나이저_기호추가_가이드.md) | 공학 기호(Ø·⊥·± …) 토큰 추가 절차·NFKC 함정 |
+
+### 2) 계획·절차 — "어떻게 작업하나"
+
+| 문서 | 내용 |
+|---|---|
+| [`PLAN.md`](yolo_finetune_donut_pipeline/PLAN.md) | YOLO→Donut 파이프라인 단계별 계획(전체 설계) |
+| [`SETUP_GUIDE.md`](yolo_finetune_donut_pipeline/SETUP_GUIDE.md) | 환경 셋업(PDF 래스터화·CVAT·학습) |
+| [`CVAT_LABELING_GUIDE.md`](yolo_finetune_donut_pipeline/CVAT_LABELING_GUIDE.md) | CVAT 라벨링 조작법(`value` 속성 → export → 변환) |
+| [`Element_Donut_데이터라벨링_작업계획.md`](yolo_finetune_donut_pipeline/Element_Donut_데이터라벨링_작업계획.md) | 실 라벨 ≥1만 확충(양 레버) — 소싱·모델보조·배치·QA·일정 |
+
+### 3) 분석·평가 리포트 — "지금 어디에 있나"
+
+| 문서 | 내용 |
+|---|---|
+| [`YOLO_검출모델_평가리포트.md`](yolo_finetune_donut_pipeline/detection/YOLO_검출모델_평가리포트.md) | View/Element YOLO 검출 성능(mAP) 평가 |
+| [`Element_Donut_평가리포트.md`](yolo_finetune_donut_pipeline/Element_Donut_평가리포트.md) | Element Donut 성능 평가(Leaf-Match 등) |
+| [`Element_Donut_근본원인_분석.md`](yolo_finetune_donut_pipeline/Element_Donut_근본원인_분석.md) | 저성능 근본 원인(데이터 규모·from-scratch OCR) |
+| [`Element_Donut_추론실패_사례분석.md`](yolo_finetune_donut_pipeline/Element_Donut_추론실패_사례분석.md) | 추론 실패 사례 분석(degenerate 생성 등) |
+| [`Element_Donut_성능미달_원인_및_해결방안.md`](yolo_finetune_donut_pipeline/Element_Donut_성능미달_원인_및_해결방안.md) | 성능미달 원인 종합 + 해결 로드맵 |
+
+> **읽는 순서 추천**: 처음이면 **1) 개념 가이드**(파인튜닝 → 토큰 → 구조화 스키마) → 작업 들어가면 **2) 계획·절차** → 막히면 **3) 분석 리포트**.
