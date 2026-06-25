@@ -77,6 +77,8 @@ model.config.pad_token_id           = tokenizer.pad_token_id
 - **필드 토큰은 템플릿이 아니라 '실제 라벨'에서 수집** — 라벨에 없는 키는 모델이 못 뱉는다.
 - `<s_cord-v2>` 는 **디코더의 시작 토큰**이기도 하다(태스크 지정 + 생성 시작 신호).
 
+> 📝 **메모**: 키 토큰은 `add_special_tokens`(이 프로젝트 방식)·`add_tokens` **둘 다 가능**(끝에 `resize_token_embeddings`만 하면 됨). 값 내용(숫자·기호)은 `skip_special_tokens=True`에도 **살아남아야** 하므로 `add_tokens`로 등록한다. — 참고로 공개 CORD-v2 체크포인트는 키 토큰도 `add_tokens`라 `all_special_tokens`엔 안 보인다(둘 다 정상 작동).
+
 ---
 
 ## 4. Dataset — Teacher Forcing 라벨 만들기
