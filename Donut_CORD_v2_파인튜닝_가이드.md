@@ -317,7 +317,7 @@ Donut 학습 기계는 **도메인을 모른다.** 하는 일은 늘 똑같다:
 |---|---|---|---|---|
 | `donut_training.ipynb` | `<s_cord-v2>` | 512 | HF cord-v2 | `menu`/`total`… |
 | `donut_training_drawings.ipynb` | `<s_drawing>` | 768 | 로컬 도면 | `title_block`/`dimensions`… |
-| `donut_training_elements.ipynb` | `<s_element>` | 128 | 로컬 요소 크롭 | `dimension`/`gdt`… (구조화) |
+| `donut_training_elements.ipynb` | `<s_element>` | 128 | 로컬 요소 크롭 | `Dimension`/`GD&T_FCF`…(클래스) → 구조화 필드 `nominalValue`/`tolerance`/`datumReference`… |
 
 ---
 
