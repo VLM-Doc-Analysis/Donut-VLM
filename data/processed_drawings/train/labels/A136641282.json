@@ -1,0 +1,27 @@
+{
+  "title_block": {
+    "title": "FLANGE CLAMP",
+    "Drawing_no": "A13-864128-2",
+    "Material": "IS365J0",
+    "Material_std": "ISO 6162-112012"
+  },
+  "dimensions": {
+    "outer_diameter": "varies",
+    "bore_diameter": "varies",
+    "thickness": "varies"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "varies",
+      "diameter": "varies",
+      "pcd": "varies"
+    }
+  },
+  "notes": [
+    "Make or similar 1405",
+    "Type ISAE flange clamp BM 3000 PSI/ISO 6162-1",
+    "Certificate EN 10 204-3.1.B",
+    "Catalog drawing: multiple DN sizes — see BOM table in drawing"
+  ],
+  "variants": "multiple DN sizes — see BOM table in drawing"
+}

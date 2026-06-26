@@ -1,0 +1,42 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A24-384298-5",
+    "LIC_Material": "N/A",
+    "Material": "SUS316LTP",
+    "Material_std": "N/A"
+  },
+  "dimensions": {
+    "outer_diameter": "130",
+    "bore_diameter": "49.2",
+    "thickness": "12"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "14",
+      "pcd": "N/A"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
+    }
+  },
+  "surface_finish": {
+    "general": "6.3",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "2023-06-15",
+  "notes": [
+    "S.P. FLANGE",
+    "Part list: S.P FLANGE SUS316LTP 1 ea"
+  ]
+}

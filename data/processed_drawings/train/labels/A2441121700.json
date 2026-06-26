@@ -1,0 +1,23 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A24-411217-0",
+    "Material": "SUS316L"
+  },
+  "dimensions": {
+    "outer_diameter": "95",
+    "bore_diameter": "20.5",
+    "thickness": "10"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "12"
+    }
+  },
+  "surface_finish": {
+    "general": "6.3"
+  },
+  "date": "2025-04-08"
+}

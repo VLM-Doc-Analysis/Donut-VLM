@@ -1,0 +1,29 @@
+{
+    "workbench.colorCustomizations": {
+        "notebook.outputContainerBackgroundColor": "#1e1e1e",
+        "notebook.outputContainerBorderColor": "#444444",
+        "terminal.foreground": "#f0f0f0",
+        "terminal.background": "#1e1e1e",
+        "terminal.ansiBlack": "#4a4a4a",
+        "terminal.ansiBrightBlack": "#909090",
+        "terminal.ansiRed": "#ff5f57",
+        "terminal.ansiBrightRed": "#ff8080",
+        "terminal.ansiGreen": "#5af78e",
+        "terminal.ansiBrightGreen": "#a8ff97",
+        "terminal.ansiYellow": "#f3f99d",
+        "terminal.ansiBrightYellow": "#ffffa0",
+        "terminal.ansiBlue": "#57c7ff",
+        "terminal.ansiBrightBlue": "#96d9ff",
+        "terminal.ansiMagenta": "#ff6ac1",
+        "terminal.ansiBrightMagenta": "#ffb3e0",
+        "terminal.ansiCyan": "#9aedfe",
+        "terminal.ansiBrightCyan": "#c0f5ff",
+        "terminal.ansiWhite": "#f0f0f0",
+        "terminal.ansiBrightWhite": "#ffffff",
+        "notebookStatusErrorIcon.foreground": "#ff5f57",
+        "editorError.foreground": "#ff5f57",
+        "editorWarning.foreground": "#f3f99d"
+    },
+    "notebook.output.fontSize": 13,
+    "notebook.output.lineHeight": 1.6
+}

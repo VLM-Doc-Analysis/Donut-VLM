@@ -1,0 +1,30 @@
+{
+  "title_block": {
+    "title": "FLANGE (JIS 1K-1000A)",
+    "Drawing_no": "A23-369433-5",
+    "Material": "SS400"
+  },
+  "dimensions": {
+    "outer_diameter": "1130",
+    "bore_diameter": "1007",
+    "thickness": "22",
+    "pcd": "1080"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "20",
+      "diameter": "25",
+      "pcd": "1080"
+    }
+  },
+  "surface_finish": {
+    "general": "12.5",
+    "machined": "3.2"
+  },
+  "date": "2025-04-21",
+  "notes": [
+    "6-3 assembly",
+    "Based on SLIP-ON FLANGE KS V 7815 JIS F 7005",
+    "용접 후 HOLE 가공 할 것"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "title_block": {
+    "title": "FLANGE CIRCULAR PLAIN",
+    "Rev": "0",
+    "Drawing_no": "A14-923647-5",
+    "LIC_Material": "N/A",
+    "Material": "SS400",
+    "Material_std": "N/A"
+  },
+  "dimensions": {
+    "outer_diameter": "445",
+    "bore_diameter": "321",
+    "thickness": "24"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "12",
+      "diameter": "22",
+      "pcd": "400"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
+    }
+  },
+  "surface_finish": {
+    "general": "12.5",
+    "machined": "6.3"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "2023-02-22",
+  "notes": [
+    "용접 후 가공 할 것"
+  ]
+}

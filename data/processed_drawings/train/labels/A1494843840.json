@@ -1,0 +1,33 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A14-948438-4",
+    "Material": "SS400",
+    "Material_std": "S17R"
+  },
+  "dimensions": {
+    "outer_diameter": "430",
+    "bore_diameter": "321",
+    "thickness": "22"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "9",
+      "diameter": "23",
+      "pcd": "390"
+    },
+    "inner": {
+      "count": "3",
+      "size": "U23",
+      "pcd": "390"
+    }
+  },
+  "surface_finish": {
+    "general": "6.3"
+  },
+  "date": "2025-02-07",
+  "notes": [
+    "용접 후 가공 할 것"
+  ]
+}

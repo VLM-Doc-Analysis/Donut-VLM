@@ -1,0 +1,26 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A14-949175-7",
+    "Material": "SUS316L",
+    "Material_std": "SC18NB"
+  },
+  "dimensions": {
+    "outer_diameter": "1206",
+    "bore_diameter": "1030",
+    "thickness": "30"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "24",
+      "diameter": "33",
+      "pcd": "1141"
+    }
+  },
+  "date": "2025-02-17",
+  "notes": [
+    "Burrs to be removed",
+    "Sharp edges to be removed"
+  ]
+}

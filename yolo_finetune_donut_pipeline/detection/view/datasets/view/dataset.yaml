@@ -1,0 +1,10 @@
+# CVAT export 잔재. 학습은 detection/view/view.yaml 을 사용하며 이 파일은 참조되지 않음.
+# path 를 이 yaml 위치(.) 기준 상대경로로 바꿔 외부 머신 절대경로(/home/pibs17/...) 제거.
+path: .
+train: images/train
+val: images/val
+nc: 3
+names:
+- View
+- Title Block
+- Notes

@@ -1,0 +1,37 @@
+{
+  "title_block": {
+    "title": "FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A24-422641-0",
+    "Material": "SUS316L",
+    "Material_std": "FA-2C-16N/14Mo-AT-T"
+  },
+  "dimensions": {
+    "outer_diameter": "98",
+    "bore_diameter": "80",
+    "thickness": "10.5"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "1"
+    },
+    "inner": {
+      "count": "6",
+      "size": "M6"
+    }
+  },
+  "surface_finish": {
+    "general": "6.3",
+    "machined": "3.2"
+  },
+  "threads": [
+    "M6",
+    "4xM6 x9/14.1"
+  ],
+  "date": "2025-11-31",
+  "notes": [
+    "4x M6 x9/14.1 boss studs",
+    "6x M6 threaded holes"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "title_block": {
+    "title": "S.P FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A14-967670-5",
+    "LIC_Material": "N/A",
+    "Material": "SUS316L",
+    "Material_std": "SC18N8"
+  },
+  "dimensions": {
+    "outer_diameter": "185",
+    "bore_diameter": "77",
+    "thickness": "20"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "4",
+      "diameter": "19",
+      "pcd": "144"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
+    }
+  },
+  "surface_finish": {
+    "general": "3.2",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "2025-07-11"
+}

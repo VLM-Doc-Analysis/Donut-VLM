@@ -1,0 +1,26 @@
+{
+  "title_block": {
+    "title": "FLANGE (SOCKET WELD NECK)",
+    "Rev": "0",
+    "Drawing_no": "BP003321200",
+    "Material": "SUS316L"
+  },
+  "dimensions": {
+    "outer_diameter": "132",
+    "bore_diameter": "19.6",
+    "thickness": "40",
+    "total_height": "38"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "8",
+      "diameter": "13.5",
+      "pcd": "110"
+    }
+  },
+  "date": "2024-10-24",
+  "notes": [
+    "Sharp edges to be removed",
+    "Weld preparation depend on maker WPS"
+  ]
+}

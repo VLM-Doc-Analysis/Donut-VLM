@@ -1,0 +1,17 @@
+# View 검출 데이터셋 (YOLOv11, AABB)
+# CVAT 에서 rectangle 로 라벨링 → "Ultralytics YOLO Detection" 포맷 export
+# 라벨 파일: detection/view/datasets/view/labels/{train,val}/<stem>.txt
+#   각 줄: <class> <cx> <cy> <w> <h>   (모두 0~1 정규화)
+#
+# 경로는 이 yaml 파일 위치 기준 상대경로. train_view.ipynb 가 detection/view/ 에서 실행됨.
+path: datasets/view
+train: images/train
+val: images/val
+
+# 클래스: title_block 은 기존 whole-page Donut 과 역할이 겹칠 수 있으나,
+# 표제란을 분리 검출하면 view 영역과 깔끔히 구분돼 유용.
+# notes 는 부품/치수 표·주기 블록 영역. (라벨 export 의 dataset.yaml: View/Title Block/Notes 와 동일 순서)
+names:
+  0: view
+  1: title_block
+  2: notes

@@ -1,0 +1,32 @@
+{
+  "title_block": {
+    "title": "TOP FLANGE",
+    "Rev": "0",
+    "Drawing_no": "A13-709547-3",
+    "Material": "SUS316L",
+    "Material_std": "SC188"
+  },
+  "dimensions": {
+    "outer_diameter": "540",
+    "bore_diameter": "110",
+    "pilot_od": "22",
+    "thickness": "22"
+  },
+  "bolt_holes": {
+    "outer": {
+      "count": "16",
+      "diameter": "25",
+      "pcd": "495"
+    },
+    "inner": {
+      "count": "8",
+      "size": "M16",
+      "pcd": "160"
+    }
+  },
+  "surface_finish": {
+    "general": "3.2",
+    "machined": "1.6"
+  },
+  "date": "2013-04-12"
+}
