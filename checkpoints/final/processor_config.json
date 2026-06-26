@@ -1,6 +1,5 @@
 {
   "image_processor": {
-    "data_format": "channels_first",
     "do_align_long_axis": false,
     "do_normalize": true,
     "do_pad": true,
@@ -12,7 +11,7 @@
       0.5,
       0.5
     ],
-    "image_processor_type": "DonutImageProcessorFast",
+    "image_processor_type": "DonutImageProcessor",
     "image_std": [
       0.5,
       0.5,

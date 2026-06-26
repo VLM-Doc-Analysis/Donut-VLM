@@ -109,11 +109,10 @@ model.config.pad_token_id           = processor.tokenizer.pad_token_id
 - ④에서 새 임베딩 행은 **랜덤값** → **파인튜닝으로 이 키 토큰들의 의미를 익히는** 것이다.
 - `<s_cord-v2>` 는 **디코더의 시작 토큰**이기도 하다(태스크 지정 + 생성 시작 신호).
 
-> 📌 **이 저장소의 구현 차이**: 위 ①~⑤(라벨에서 키 수집·등록)는 **완전한 방식**으로,
-> `donut_training_drawings.ipynb` · `donut_training_elements.ipynb` 의 `build_model_and_processor` 가 이렇게 한다.
-> 반면 **CORD 레퍼런스 `donut_training.ipynb` 는 더 단순**해서 **task 토큰만** 등록한다
-> (`re.findall(r"<[^>]+>", task_prompt)`) — 필드 토큰은 별도 등록 없이 SentencePiece subword 로 쪼개져 학습된다.
-> **새 도메인을 제대로 이식하려면 위 ①~⑤(키 수집·등록)을 권장**한다.
+> 📌 **이 저장소의 구현**: 위 ①~⑤(라벨에서 키 수집·등록)는 **완전한 방식**으로,
+> 이제 **세 학습 노트북 모두**(`donut_training.ipynb`(HF gt_parse) · `donut_training_drawings.ipynb` · `donut_training_elements.ipynb`)의
+> `build_model_and_processor` 가 이렇게 한다. (예전엔 CORD 노트북이 task 토큰만 등록했으나, 필드 토큰을 subword로 쪼개지 않도록 키 수집을 추가함.)
+> **새 도메인 이식 시에도 위 ①~⑤(키 수집·등록)을 그대로 따르면 된다.**
 
 > 📝 **메모**: 키 토큰은 `add_special_tokens`(이 프로젝트 방식)·`add_tokens` **둘 다 가능**(끝에 `resize_token_embeddings`만 하면 됨). 값 내용(숫자·기호)은 `skip_special_tokens=True`에도 **살아남아야** 하므로 `add_tokens`로 등록한다. — 참고로 공개 CORD-v2 체크포인트는 키 토큰도 `add_tokens`라 `all_special_tokens`엔 안 보인다(둘 다 정상 작동).
 
