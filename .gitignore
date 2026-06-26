@@ -8,6 +8,9 @@ runs/
 # detection/**/runs/
 # *.pt
 
+# SROIE 데이터 (노트북 git clone 셀로 재생성 가능 — 커밋 안 함)
+SROIE_donut/data/
+
 # 실험 부산물 (3/6클래스 비교 등 일회성 산출 — 재생성 가능, 커밋 안 함)
 checkpoints_elements_3cls/
 checkpoints_elements_all/
