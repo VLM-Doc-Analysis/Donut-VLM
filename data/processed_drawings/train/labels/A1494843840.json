@@ -3,6 +3,7 @@
     "title": "FLANGE",
     "Rev": "0",
     "Drawing_no": "A14-948438-4",
+    "LIC_Material": "N/A",
     "Material": "SS400",
     "Material_std": "S17R"
   },
@@ -24,8 +25,15 @@
     }
   },
   "surface_finish": {
-    "general": "6.3"
+    "general": "6.3",
+    "machined": "N/A"
   },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2025-02-07",
   "notes": [
     "용접 후 가공 할 것"

@@ -1,8 +1,11 @@
 {
   "title_block": {
     "title": "FLANGE",
+    "Rev": "N/A",
     "Drawing_no": "A23-397418-4",
-    "Material": "SS400"
+    "LIC_Material": "N/A",
+    "Material": "SS400",
+    "Material_std": "N/A"
   },
   "dimensions": {
     "outer_diameter": "770",
@@ -12,13 +15,25 @@
   "bolt_holes": {
     "outer": {
       "count": "16",
-      "diameter": "12"
+      "diameter": "12",
+      "pcd": "N/A"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
   "surface_finish": {
     "general": "6.3",
     "machined": "12.5"
   },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2025-04-21",
   "notes": [
     "8-1-1 assembly",

@@ -1,7 +1,9 @@
 {
   "title_block": {
     "title": "FLANGE CLAMP",
+    "Rev": "N/A",
     "Drawing_no": "A13-864128-2",
+    "LIC_Material": "N/A",
     "Material": "IS365J0",
     "Material_std": "ISO 6162-112012"
   },
@@ -15,8 +17,24 @@
       "count": "varies",
       "diameter": "varies",
       "pcd": "varies"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "N/A",
   "notes": [
     "Make or similar 1405",
     "Type ISAE flange clamp BM 3000 PSI/ISO 6162-1",

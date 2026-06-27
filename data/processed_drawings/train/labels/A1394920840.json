@@ -3,6 +3,7 @@
     "title": "FLANGE CIRCULAR WITH NECK",
     "Rev": "0",
     "Drawing_no": "A13-949208-4",
+    "LIC_Material": "N/A",
     "Material": "SUS316L",
     "Material_std": "ISO 7008-1"
   },
@@ -13,15 +14,29 @@
   },
   "bolt_holes": {
     "outer": {
-      "count": "4"
+      "count": "4",
+      "diameter": "N/A",
+      "pcd": "N/A"
     },
     "inner": {
-      "size": "M12"
+      "count": "N/A",
+      "size": "M12",
+      "pcd": "N/A"
     }
+  },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
   },
   "threads": [
     "M12"
   ],
+  "date": "N/A",
   "notes": [
     "Surfaces acc. to DIN EN 192-1",
     "Tolerances acc. to DIN EN 1092-1",

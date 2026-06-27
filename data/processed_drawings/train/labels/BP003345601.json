@@ -3,7 +3,9 @@
     "title": "FLANGE (MULTI-PORT ASSEMBLY)",
     "Rev": "1",
     "Drawing_no": "BP003345601",
-    "Material": "SUS316L"
+    "LIC_Material": "N/A",
+    "Material": "SUS316L",
+    "Material_std": "N/A"
   },
   "dimensions": {
     "outer_diameter": "210",
@@ -15,8 +17,24 @@
       "count": "8",
       "diameter": "17",
       "pcd": "165"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "N/A",
   "notes": [
     "902-005 1EA",
     "16-BP003345601",

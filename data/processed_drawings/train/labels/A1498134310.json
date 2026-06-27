@@ -3,19 +3,38 @@
     "title": "S.P FLANGE 10K-20A",
     "Rev": "0",
     "Drawing_no": "A14-981343-1",
-    "Material": "SUS316L"
+    "LIC_Material": "N/A",
+    "Material": "SUS316L",
+    "Material_std": "N/A"
   },
   "dimensions": {
     "outer_diameter": "100",
     "bore_diameter": "75",
     "thickness": "14",
-    "pilot_od": "22.5"
+    "pilot_od": "22.5",
+    "fit": "N11"
   },
   "bolt_holes": {
     "outer": {
       "count": "4",
-      "diameter": "15"
+      "diameter": "15",
+      "pcd": "N/A"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2025-10-24"
 }

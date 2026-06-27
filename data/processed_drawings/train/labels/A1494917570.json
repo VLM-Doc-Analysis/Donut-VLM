@@ -3,6 +3,7 @@
     "title": "FLANGE",
     "Rev": "0",
     "Drawing_no": "A14-949175-7",
+    "LIC_Material": "N/A",
     "Material": "SUS316L",
     "Material_std": "SC18NB"
   },
@@ -16,8 +17,23 @@
       "count": "24",
       "diameter": "33",
       "pcd": "1141"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2025-02-17",
   "notes": [
     "Burrs to be removed",
