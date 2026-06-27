@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# 스테이징된 .ipynb 에서 깨진 위젯 메타데이터를 자동 제거(GitHub 렌더 오류 방지).
+# 클리너: scripts/clean_ipynb_widgets.py
+# 활성화(클론 후 1회): git config core.hooksPath .githooks
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+mapfile -t NBS < <(git diff --cached --name-only --diff-filter=ACM | grep -E '\.ipynb$' || true)
+[ "${#NBS[@]}" -eq 0 ] && exit 0
+
+python3 "$ROOT/scripts/clean_ipynb_widgets.py" "${NBS[@]}"
+
+# 정리로 바뀐 노트북을 다시 스테이징
+for f in "${NBS[@]}"; do
+  [ -f "$ROOT/$f" ] && git add "$f"
+done
+exit 0
