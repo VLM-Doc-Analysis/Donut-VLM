@@ -47,3 +47,4 @@ __pycache__/
 # OS
 .DS_Store
 # donut_base_test.ipynb
+donut_finetune_parsing/donut-base-finetuned-sroie-1280x1600/
