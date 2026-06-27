@@ -19,7 +19,7 @@
     },
     "inner": {
       "count": "3",
-      "diameter": "20",
+      "size": "Ø20",
       "pcd": "360"
     }
   },

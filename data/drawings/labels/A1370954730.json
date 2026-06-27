@@ -28,13 +28,18 @@
       "pcd": "160"
     }
   },
-  "intermediate_diameters": {
-    "d1": "133",
-    "d2": "143"
-  },
   "surface_finish": {
     "general": "3.2",
     "machined": "1.6"
   },
-  "date": "2013-04-12"
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
+  "date": "2013-04-12",
+  "notes": [
+    "intermediate diameters: Ø133, Ø143"
+  ]
 }
