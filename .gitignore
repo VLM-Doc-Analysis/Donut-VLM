@@ -11,6 +11,11 @@ runs/
 # SROIE 데이터 (노트북 git clone 셀로 재생성 가능 — 커밋 안 함)
 SROIE_donut/data/
 
+# 분류 노트북이 첫 셀에서 클론하는 외부 라이브러리 (재생성 가능 — 커밋 안 함)
+donut_finetune_classification/hftuner/
+# 분류 학습 산출물 (재생성 가능)
+donut_finetune_classification/donut-classification-turbo/
+
 # 실험 부산물 (3/6클래스 비교 등 일회성 산출 — 재생성 가능, 커밋 안 함)
 checkpoints_elements_3cls/
 checkpoints_elements_all/
