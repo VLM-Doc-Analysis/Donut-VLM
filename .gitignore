@@ -18,6 +18,7 @@ donut_finetune_classification/donut-classification-turbo/
 # 파싱 노트북 클론 라이브러리 + 학습 산출물 (재생성 가능)
 donut_finetune_parsing/hftuner/
 donut_finetune_parsing/donut-base-finetuned-sroie/
+donut_finetune_parsing/donut-base-finetuned-sroie-hires/
 
 # 실험 부산물 (3/6클래스 비교 등 일회성 산출 — 재생성 가능, 커밋 안 함)
 checkpoints_elements_3cls/
