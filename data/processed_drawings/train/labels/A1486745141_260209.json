@@ -3,6 +3,7 @@
     "title": "FLANGE CIRCULAR PLAIN",
     "Rev": "1",
     "Drawing_no": "A14-867451-4",
+    "LIC_Material": "N/A",
     "Material": "SUS316L",
     "Material_std": "SC18NB"
   },
@@ -16,8 +17,23 @@
       "count": "20",
       "diameter": "27",
       "pcd": "803"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2026-02-09",
   "notes": [
     "1-1-4 1ea",

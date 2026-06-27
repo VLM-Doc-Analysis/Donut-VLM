@@ -3,6 +3,7 @@
     "title": "FLANGE CIRCULAR PLAIN",
     "Rev": "0",
     "Drawing_no": "A14-988356-8",
+    "LIC_Material": "N/A",
     "Material": "SUS316L",
     "Material_std": "S1TR"
   },
@@ -24,8 +25,15 @@
     }
   },
   "surface_finish": {
-    "general": "6.3"
+    "general": "6.3",
+    "machined": "N/A"
   },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2026-03-31",
   "notes": [
     "용접 후 가공 할 것"

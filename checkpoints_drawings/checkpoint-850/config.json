@@ -60,7 +60,7 @@
     "torchscript": false,
     "use_bfloat16": false,
     "use_cache": true,
-    "vocab_size": 57584
+    "vocab_size": 57612
   },
   "decoder_start_token_id": 57525,
   "dtype": "float32",

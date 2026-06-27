@@ -3,27 +3,36 @@
     "title": "FLANGE",
     "Rev": "0",
     "Drawing_no": "A24-422641-0",
+    "LIC_Material": "N/A",
     "Material": "SUS316L",
     "Material_std": "FA-2C-16N/14Mo-AT-T"
   },
   "dimensions": {
     "outer_diameter": "98",
     "bore_diameter": "80",
-    "thickness": "10.5"
+    "thickness": "10.5",
+    "inner_bore": "49"
   },
   "bolt_holes": {
     "outer": {
       "count": "4",
-      "diameter": "1"
+      "diameter": "1",
+      "pcd": "N/A"
     },
     "inner": {
       "count": "6",
-      "size": "M6"
+      "size": "M6",
+      "pcd": "N/A"
     }
   },
   "surface_finish": {
     "general": "6.3",
     "machined": "3.2"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
   },
   "threads": [
     "M6",

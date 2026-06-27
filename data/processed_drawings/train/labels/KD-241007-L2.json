@@ -3,19 +3,36 @@
     "title": "FLANGE",
     "Rev": "0",
     "Drawing_no": "5725-1-S / 5728-1-6",
-    "Material": "SS400"
+    "LIC_Material": "N/A",
+    "Material": "SS400",
+    "Material_std": "N/A"
   },
   "dimensions": {
     "outer_diameter": "270",
     "bore_diameter": "110",
-    "thickness": "26"
+    "thickness": "26",
+    "boss_height": "37"
   },
   "bolt_holes": {
     "outer": {
       "count": "8",
       "diameter": "18",
       "pcd": "200"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
+  },
+  "surface_finish": {
+    "general": "N/A",
+    "machined": "N/A"
+  },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
   },
   "threads": [
     "M16"

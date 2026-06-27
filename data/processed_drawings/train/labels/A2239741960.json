@@ -3,7 +3,9 @@
     "title": "FLANGE",
     "Rev": "0",
     "Drawing_no": "A22-397419-6",
-    "Material": "SS400"
+    "LIC_Material": "N/A",
+    "Material": "SS400",
+    "Material_std": "N/A"
   },
   "dimensions": {
     "outer_diameter": "821",
@@ -15,12 +17,23 @@
       "count": "24",
       "diameter": "26",
       "pcd": "743"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
   "surface_finish": {
     "general": "6.3",
     "machined": "12.5"
   },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2025-04-21",
   "notes": [
     "5-2 assembly",

@@ -3,7 +3,9 @@
     "title": "FLANGE",
     "Rev": "0",
     "Drawing_no": "A24-384299-7",
-    "Material": "SUS316LTP"
+    "LIC_Material": "N/A",
+    "Material": "SUS316LTP",
+    "Material_std": "N/A"
   },
   "dimensions": {
     "outer_diameter": "130",
@@ -16,10 +18,22 @@
       "count": "4",
       "diameter": "14",
       "pcd": "95"
+    },
+    "inner": {
+      "count": "N/A",
+      "size": "N/A",
+      "pcd": "N/A"
     }
   },
   "surface_finish": {
-    "general": "6.3"
+    "general": "6.3",
+    "machined": "N/A"
   },
+  "gdt": {
+    "flatness": "N/A",
+    "perpendicularity": "N/A",
+    "concentricity": "N/A"
+  },
+  "threads": [],
   "date": "2023-06-15"
 }
