@@ -73,10 +73,15 @@ def gen_dimension():
         base = f"{random.randint(2, 8)}{random.choice(['X', '×', 'X '])}{base}"
     # 공차 접미
     r = random.random()
-    if r < 0.18:
-        base += f"±{_num(0.01, 0.5, random.choice([2, 3]))}"          # 대칭
-    elif r < 0.28:
-        base += f"+{_num(0.01, 0.3, 2)} -{_num(0.01, 0.3, 2)}"        # 비대칭
+    if r < 0.15:
+        base += f"±{_num(0.01, 0.5, random.choice([2, 3]))}"          # 대칭(인라인)
+    elif r < 0.25:
+        base += f"+{_num(0.01, 0.3, 2)} -{_num(0.01, 0.3, 2)}"        # 비대칭(인라인)
+    elif r < 0.55:                                                    # 적층(세로): 기준값 위 / +.,-. 공차 아래
+        up = f".{random.randint(0, 80):03d}"; lo = f".{random.randint(0, 80):03d}"
+        label       = f"{base}+{up}-{lo}"          # 라벨: 연결형(실데이터 관례, parse_to_schema 가 분해)
+        render_text = f"{base}\n+{up}\n-{lo}"     # 렌더: 3줄 적층
+        return (label, render_text)
     return base
 
 
@@ -145,18 +150,25 @@ def render(text: str, vertical: bool = False) -> Image.Image:
     font = (ImageFont.truetype(str(font_path), size) if font_path
             else ImageFont.load_default())
 
-    # 글자 크기 측정
+    # 글자 크기 측정 (적층 공차 등 다중행 지원)
+    _ml = "\n" in text
     tmp = Image.new("L", (4, 4), 255)
-    l, t, r, b = ImageDraw.Draw(tmp).textbbox((0, 0), text, font=font)
+    if _ml:
+        l, t, r, b = ImageDraw.Draw(tmp).multiline_textbbox((0, 0), text, font=font, align="center", spacing=4)
+    else:
+        l, t, r, b = ImageDraw.Draw(tmp).textbbox((0, 0), text, font=font)
     tw, th = r - l, b - t
     pad_x, pad_y = random.randint(6, 16), random.randint(5, 12)
-    W, H = tw + 2 * pad_x, th + 2 * pad_y
+    W, H = math.ceil(tw) + 2 * pad_x, math.ceil(th) + 2 * pad_y   # multiline bbox 는 float → 정수화
 
     bg = random.randint(245, 255)                      # 살짝 회색빛 배경도 허용
     img = Image.new("L", (W, H), bg)
     d = ImageDraw.Draw(img)
     fill = random.randint(0, 45)                        # 검정~짙은 회색 글자
-    d.text((pad_x - l, pad_y - t), text, font=font, fill=fill)
+    if _ml:
+        d.multiline_text((pad_x - l, pad_y - t), text, font=font, fill=fill, align="center", spacing=4)
+    else:
+        d.text((pad_x - l, pad_y - t), text, font=font, fill=fill)
 
     # 약한 증강: 회전(정렬 잔여각 ±2°), 블러, 가우시안 노이즈
     if random.random() < 0.5:
@@ -211,13 +223,14 @@ def main():
 
     for i in range(args.n):
         cls = random.choices(classes, weights=weights, k=1)[0]
-        value = GENERATORS[cls]()
+        _v = GENERATORS[cls]()
+        label, render_text = _v if isinstance(_v, tuple) else (_v, _v)
         vertical = random.random() < args.vertical_ratio
-        img = render(value, vertical=vertical)
+        img = render(render_text, vertical=vertical)
 
         stem = f"synth_{i:06d}_{cls.replace('&', 'and').replace('/', '_')}"
         img.save(out / "images" / f"{stem}.png")
-        json.dump({cls: value}, open(out / "labels" / f"{stem}.json", "w", encoding="utf-8"),
+        json.dump({cls: label}, open(out / "labels" / f"{stem}.json", "w", encoding="utf-8"),
                   ensure_ascii=False)
         per_class[cls] += 1
 
