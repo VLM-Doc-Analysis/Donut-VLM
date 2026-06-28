@@ -42,10 +42,13 @@ CVAT element 라벨링(`value` 속성 정의 → export → 변환)은
 
 ## 환경
 
-- **권장: conda `kardi_env`** — 파이프라인 전 단계(YOLO + Donut)를 **단일 커널**로 실행
-  (torch 2.11 · transformers 4.57 · ultralytics · timm · PyMuPDF · opencv 등). 커널 전환 불필요.
-- 원 학습 노트북(`donut_training*.ipynb`)은 `torch_211_env`(transformers 5.3)에서도 동작.
+- **conda 환경: `donut_vml`** (동명 Jupyter 커널) — 파이프라인 전 단계(YOLO 검출 + Donut 인식/학습)를
+  **단일 커널**로 실행. 커널 전환 불필요. 검증 환경: **RTX 5090**(Blackwell, sm_120, 32GB,
+  driver 580.159.03) · **PyTorch 2.11.0+cu128**(CUDA 12.8) · **transformers 5.12.1** ·
+  timm 1.0.27 · sentencepiece 0.2.1 · accelerate 1.14.0 · datasets 5.0.0 ·
+  ultralytics 8.4.80 · opencv(cv2) 4.13.0 · PyMuPDF(fitz) 1.27.2.3.
 - 설치: `pip install -r requirements.txt` (**transformers ≥ 4.45 필수** — `evaluation_strategy`→`eval_strategy`)
+- **bf16 사용·fp16 금지**(Donut 수치 불안정). RTX 5090 은 bf16 지원 → 학습 셀이 자동 적용.
 - 각 노트북 첫 코드 셀이 버전과 `torch.cuda.is_available()` 를 출력 — `False` 면 환경 설정을 점검하세요.
 
 ## 빠른 시작 (② 파이프라인)
