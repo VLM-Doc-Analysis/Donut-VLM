@@ -1,4 +1,5 @@
 {
+    "python.defaultInterpreterPath": "/home/jhkim/anaconda3/envs/donut_vml/bin/python",
     "workbench.colorCustomizations": {
         "notebook.outputContainerBackgroundColor": "#1e1e1e",
         "notebook.outputContainerBorderColor": "#444444",

@@ -1,5 +1,7 @@
 {
   "typeCheckingMode": "standard",
+  "venvPath": "/home/jhkim/anaconda3/envs",
+  "venv": "donut_vml",
   "extraPaths": [
     "yolo_finetune_donut_pipeline/detection"
   ]
