@@ -17,3 +17,6 @@ SROIE_donut/assets/donut.png -filter -diff -merge
 **/detection/report_assets/*.png -filter -diff -merge
 # 가이드 .md 에 임베드되는 예시 이미지도 LFS 제외
 test_data/CORD_Test_Data.png -filter -diff -merge
+# 루트 assets/ 는 README 문서용 이미지 전용 → LFS 제외
+assets/*.png -filter -diff -merge
+assets/*.jpg -filter -diff -merge

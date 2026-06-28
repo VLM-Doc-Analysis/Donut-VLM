@@ -5,7 +5,7 @@
 산출물은 **Jupyter 노트북 모음**이며, 각 노트북은 위 → 아래 순서로 실행하도록 작성돼 있습니다.
 각 코드 셀 위에는 **`🔹 역할` 한 줄 요약 마크다운**이 있어, 셀을 펼치지 않아도 전체 흐름을 파악할 수 있습니다.
 
-![Donut 아키텍처](SROIE_donut/assets/donut.png)
+![Donut 아키텍처](assets/donut.png)
 
 > **Donut**(Document Understanding Transformer): OCR 엔진 없이 이미지를 바로 읽는 비전 인코더(Swin) +
 > 텍스트 디코더(BART) 구조의 멀티모달 seq2seq. 이미지 → 구조화 토큰열(→ JSON)을 end-to-end 로 생성합니다.
@@ -18,6 +18,9 @@
 
 ![YOLO → Donut 파이프라인](assets/pipeline.svg)
 
+<details>
+<summary>텍스트 다이어그램 (출력 JSON 형태 포함)</summary>
+
 ```
 PDF ──rasterize(300 DPI)──▶ page.png
    ──view 검출 (YOLOv11, AABB)──▶ view 크롭
@@ -25,6 +28,8 @@ PDF ──rasterize(300 DPI)──▶ page.png
    ──element Donut 인식──▶ 값 ("Ø65", "Ra 1.6" …)
    ──조립──▶ { "views": [ { "elements": [ {type, value, box} ] } ] }
 ```
+
+</details>
 
 아래 표의 `위치` 경로는 모두 [`yolo_finetune_donut_pipeline/`](yolo_finetune_donut_pipeline/) 기준 상대경로입니다.
 
