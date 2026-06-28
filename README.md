@@ -5,6 +5,11 @@
 산출물은 **Jupyter 노트북 모음**이며, 각 노트북은 위 → 아래 순서로 실행하도록 작성돼 있습니다.
 각 코드 셀 위에는 **`🔹 역할` 한 줄 요약 마크다운**이 있어, 셀을 펼치지 않아도 전체 흐름을 파악할 수 있습니다.
 
+![Donut 아키텍처](SROIE_donut/assets/donut.png)
+
+> **Donut**(Document Understanding Transformer): OCR 엔진 없이 이미지를 바로 읽는 비전 인코더(Swin) +
+> 텍스트 디코더(BART) 구조의 멀티모달 seq2seq. 이미지 → 구조화 토큰열(→ JSON)을 end-to-end 로 생성합니다.
+
 ## 두 가지 접근
 
 | 접근 | 진입점 | 설명 |
@@ -17,6 +22,8 @@
 > `donut_training_drawings.ipynb` 마지막 마크다운 셀 참고)
 
 ## YOLO → Donut 파이프라인
+
+![YOLO → Donut 파이프라인](assets/pipeline.svg)
 
 ```
 PDF ──rasterize(300 DPI)──▶ page.png
@@ -39,6 +46,18 @@ PDF ──rasterize(300 DPI)──▶ page.png
 환경 셋업은 [`yolo_finetune_donut_pipeline/SETUP_GUIDE.md`](yolo_finetune_donut_pipeline/SETUP_GUIDE.md),
 CVAT element 라벨링(`value` 속성 정의 → export → 변환)은
 [`yolo_finetune_donut_pipeline/CVAT_LABELING_GUIDE.md`](yolo_finetune_donut_pipeline/CVAT_LABELING_GUIDE.md) 참고.
+
+### 검출 성능 (YOLO)
+
+View / Element 검출 모델의 학습 곡선·혼동행렬·mAP. 상세 평가는
+[`YOLO_검출모델_평가리포트.md`](yolo_finetune_donut_pipeline/detection/YOLO_검출모델_평가리포트.md) 참고.
+
+| | 학습 곡선 | 혼동 행렬 |
+|---|---|---|
+| **View** | ![View 학습곡선](yolo_finetune_donut_pipeline/detection/report_assets/view_training_curves.png) | ![View 혼동행렬](yolo_finetune_donut_pipeline/detection/report_assets/view_confusion_matrix.png) |
+| **Element** | ![Element 학습곡선](yolo_finetune_donut_pipeline/detection/report_assets/element_training_curves.png) | ![Element 혼동행렬](yolo_finetune_donut_pipeline/detection/report_assets/element_confusion_matrix.png) |
+
+![Element mAP 곡선](yolo_finetune_donut_pipeline/detection/report_assets/element_mAP_curve.png)
 
 ## 환경
 

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 200" font-family="-apple-system, 'Segoe UI', 'Noto Sans KR', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- stage boxes -->
+  <g>
+    <rect x="20"  y="70" width="150" height="80" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="95"  y="105" text-anchor="middle" font-size="18" font-weight="700" fill="#334155">PDF</text>
+    <text x="95"  y="128" text-anchor="middle" font-size="13" fill="#64748b">도면 입력</text>
+
+    <rect x="200" y="70" width="150" height="80" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="275" y="105" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">Rasterize</text>
+    <text x="275" y="128" text-anchor="middle" font-size="13" fill="#3b82f6">300 DPI → PNG</text>
+
+    <rect x="380" y="70" width="150" height="80" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+    <text x="455" y="105" text-anchor="middle" font-size="16" font-weight="700" fill="#047857">View 검출</text>
+    <text x="455" y="128" text-anchor="middle" font-size="13" fill="#10b981">YOLOv11 · AABB</text>
+
+    <rect x="560" y="70" width="150" height="80" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+    <text x="635" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#047857">Element 검출</text>
+    <text x="635" y="122" text-anchor="middle" font-size="13" fill="#059669">YOLOv11-OBB</text>
+    <text x="635" y="139" text-anchor="middle" font-size="12" fill="#059669">+ 정렬(rectify)</text>
+
+    <rect x="740" y="70" width="150" height="80" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+    <text x="815" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#c2410c">Donut 인식</text>
+    <text x="815" y="122" text-anchor="middle" font-size="13" fill="#f97316">크롭 → 값</text>
+    <text x="815" y="139" text-anchor="middle" font-size="12" fill="#f97316">"Ø65" · "Ra 1.6"</text>
+
+    <rect x="920" y="70" width="150" height="80" rx="10" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="995" y="105" text-anchor="middle" font-size="16" font-weight="700" fill="#7e22ce">조립</text>
+    <text x="995" y="128" text-anchor="middle" font-size="13" fill="#a855f7">구조화 JSON</text>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#64748b" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="170" y1="110" x2="196" y2="110"/>
+    <line x1="350" y1="110" x2="376" y2="110"/>
+    <line x1="530" y1="110" x2="556" y2="110"/>
+    <line x1="710" y1="110" x2="736" y2="110"/>
+    <line x1="890" y1="110" x2="916" y2="110"/>
+  </g>
+
+  <text x="550" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">YOLO → Donut 2단 파이프라인</text>
+</svg>
