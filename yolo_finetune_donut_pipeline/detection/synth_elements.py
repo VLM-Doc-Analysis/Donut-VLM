@@ -183,6 +183,9 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--vertical-ratio", type=float, default=0.0,
                     help="세로로 세운 크롭 비율(파이프라인이 rectify 로 다시 눕히는 경우만 >0 권장)")
+    ap.add_argument("--weights", type=str, default=None,
+                    help='클래스 가중 오버라이드 "Class=w,Class=w" (미지정 클래스는 기본값 유지). '
+                         '예: "GD&T_FCF=0.30,Hole_Callout=0.25" — 약한 클래스 비중↑')
     args = ap.parse_args()
 
     random.seed(args.seed)
@@ -197,7 +200,13 @@ def main():
     (out / "labels").mkdir(parents=True, exist_ok=True)
 
     classes = list(GENERATORS)
-    weights = [DEFAULT_WEIGHTS[c] for c in classes]
+    weights_map = dict(DEFAULT_WEIGHTS)
+    if args.weights:                                   # CLI 가중 오버라이드
+        for kv in args.weights.split(","):
+            k, v = kv.split("="); k = k.strip()
+            if k in weights_map: weights_map[k] = float(v)
+            else: print(f"  ⚠️ 무시: 알 수 없는 클래스 '{k}' (유효: {classes})")
+    weights = [weights_map[c] for c in classes]
     per_class = {c: 0 for c in classes}
 
     for i in range(args.n):
