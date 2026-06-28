@@ -13,3 +13,5 @@ SROIE_donut/assets/donut.png -filter -diff -merge
 **/assets/donut_architecture.jpg -filter -diff -merge
 **/hftuner/assets/donut-arch.png -filter -diff -merge
 **/hftuner/assets/donut-doc_vqa-inputs.png -filter -diff -merge
+# README 에 노출되는 검출 성능 차트도 LFS 제외(작아서 blob, LFS 한도 영향 없음)
+**/detection/report_assets/*.png -filter -diff -merge
