@@ -16,6 +16,7 @@
     "<s>",
     "</s>"
   ],
+  "from_slow": true,
   "is_local": false,
   "local_files_only": false,
   "mask_token": "<mask>",

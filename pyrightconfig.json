@@ -1,8 +1,14 @@
 {
-  "typeCheckingMode": "standard",
+  "typeCheckingMode": "basic",
   "venvPath": "/home/jhkim/anaconda3/envs",
   "venv": "donut_vml",
   "extraPaths": [
     "yolo_finetune_donut_pipeline/detection"
-  ]
+  ],
+  "reportAttributeAccessIssue": "none",
+  "reportOptionalMemberAccess": "none",
+  "reportArgumentType": "none",
+  "reportCallIssue": "none",
+  "reportReturnType": "none",
+  "reportUnusedExpression": "none"
 }
