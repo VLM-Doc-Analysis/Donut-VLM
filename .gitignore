@@ -11,12 +11,13 @@ runs/
 # SROIE 데이터 (노트북 git clone 셀로 재생성 가능 — 커밋 안 함)
 SROIE_donut/data/
 
-# 분류 노트북이 첫 셀에서 클론하는 외부 라이브러리 (재생성 가능 — 커밋 안 함)
-donut_finetune_classification/hftuner/
+# hftuner: 외부 donut 라이브러리 클론. 이미지 링크 로컬화 후 GitHub 에도 올리도록 추적 전환.
+#   (내부 .git 은 제거해 일반 파일로 편입. __pycache__ 는 아래 규칙으로 제외)
+# donut_finetune_classification/hftuner/
 # 분류 학습 산출물 (재생성 가능)
 donut_finetune_classification/donut-classification-turbo/
 # 파싱 노트북 클론 라이브러리 + 학습 산출물 (재생성 가능)
-donut_finetune_parsing/hftuner/
+# donut_finetune_parsing/hftuner/
 donut_finetune_parsing/donut-base-finetuned-sroie/
 donut_finetune_parsing/donut-base-finetuned-sroie-hires/
 
