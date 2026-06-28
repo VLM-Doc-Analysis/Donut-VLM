@@ -38,6 +38,7 @@ import argparse
 import json
 import math
 import random
+import shutil
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -208,6 +209,8 @@ def main():
         pass
 
     out = Path(args.out)
+    if out.exists():
+        shutil.rmtree(out)                          # 누적 방지: 매 실행 폴더를 새로 생성 (이전 합성 잔여 제거)
     (out / "images").mkdir(parents=True, exist_ok=True)
     (out / "labels").mkdir(parents=True, exist_ok=True)
 
