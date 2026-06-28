@@ -3,6 +3,12 @@
 # checkpoints_drawings/
 # checkpoints_elements/
 
+# LFS 비용 절감: 중간 체크포인트(checkpoint-NNN/)·실험성 런은 추적 제외, final/ 만 커밋.
+#   (추론엔 final/ 만 필요. optimizer.pt 등 학습재개 상태가 용량 대부분이라 비커밋)
+checkpoints*/checkpoint-*/
+checkpoints/test_run/
+checkpoints/test_211/
+
 # YOLO training outputs
 runs/
 # detection/**/runs/
