@@ -1,7 +1,7 @@
 # Element Donut — 추론 실패 근본 원인 분석 & 해결책
 
 > 대상: `checkpoints_elements/final` (토크나이저 확장 후 재학습본, best eval_loss 0.67 / step 800)
-> 진단: 검증셋 197장 분해 측정 + train/val 비교 + 강제 생성 실험 · 환경 `kardi_env`
+> 진단: 검증셋 197장 분해 측정 + train/val 비교 + 강제 생성 실험 · 환경 `donut_vml`
 > 작성: 2026-06-24
 > 관련: [`Element_Donut_평가리포트.md`](Element_Donut_평가리포트.md) · [`Element_Donut_추론실패_사례분석.md`](Element_Donut_추론실패_사례분석.md) · [`Element_Donut_토크나이저_기호추가_가이드.md`](Element_Donut_토크나이저_기호추가_가이드.md)
 

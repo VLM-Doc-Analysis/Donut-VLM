@@ -22,12 +22,12 @@ PDF ──래스터화──▶ page.png (300 DPI)
 해상도가 부족하다. YOLO 로 작은 영역만 잘라 정렬해서 넣어야 Donut 이 안정적으로 읽는다.
 
 **라벨링 도구**: CVAT (자체 호스팅, 온프레미스)
-**커널**: 전 단계를 **단일 커널 `kardi_env`** 로 실행한다. `kardi_env` 에 YOLO(ultralytics)와
+**커널**: 전 단계를 **단일 커널 `donut_vml`** 로 실행한다. `donut_vml` 에 YOLO(ultralytics)와
 Donut(transformers/torch) 의존성이 **모두 설치돼 있어 커널 전환·디스크 핸드오프가 불필요**하다.
-- 핵심 구성: torch 2.11.0(CUDA 13.0) · transformers 4.57.6 · timm · sentencepiece · opencv · PyMuPDF · ultralytics
+- 핵심 구성: torch 2.11.0(CUDA 12.8/cu128) · transformers 5.12.1 · timm · sentencepiece · opencv · PyMuPDF · ultralytics
 - 학습도 동일 커널: accelerate·datasets 포함, 평가는 자체 `compute_leaf_match`(외부 `evaluate` 불필요), `report_to=none`.
 - 버전 메모: 과거엔 Donut 을 `torch_211_env`(transformers 5.3.0)에서 돌렸으나, 5.3.0 으로 저장한
-  체크포인트도 `kardi_env`(4.57.6)에서 정상 로드·추론됨을 확인. 굳이 두 환경을 나눌 이유가 없어 통합.
+  체크포인트도 통합 커널 `donut_vml`(당시 transformers 4.57.6)에서 정상 로드·추론됨을 확인. 굳이 두 환경을 나눌 이유가 없어 통합.
 
 ## 클래스 정의
 
@@ -41,7 +41,7 @@ Donut(transformers/torch) 의존성이 **모두 설치돼 있어 커널 전환·
 
 ## 단계별 계획
 
-### 0단계 — PDF 재래스터화  (`detection/rasterize_pdf.ipynb`, kardi_env)
+### 0단계 — PDF 재래스터화  (`detection/rasterize_pdf.ipynb`, donut_vml)
 - `data/raw_pdf/*.pdf` (50장) → `data/drawings_pages/<stem>.png`
 - 엔진: PyMuPDF(`fitz`) 우선, 없으면 `pdf2image`(poppler)
 - **300 DPI 이상**으로 재생성 — 요소 크롭 1개당 충분한 픽셀 확보가 목적
@@ -62,7 +62,7 @@ Donut(transformers/torch) 의존성이 **모두 설치돼 있어 커널 전환·
 3. 학습 → `detection/element/runs/element/weights/best.pt`
 - 라벨 포맷: `<class> <x1> <y1> ... <x4> <y4>` (4점, 0~1 정규화)
 
-### 3단계 — Donut 요소 파인튜닝  (`donut_training_elements.ipynb`, kardi_env)
+### 3단계 — Donut 요소 파인튜닝  (`donut_training_elements.ipynb`, donut_vml)
 
 범용 문서 모델 `naver-clova-ix/donut-base` 를 **도면 요소 전용 인식 태스크**로 바꾸는 단계.
 베이스 모델은 도면 치수/공차 기호(Ø, Ra, ± 등)를 모르므로, 정렬된 요소 크롭 → `{"<type>":"<value>"}`
@@ -107,7 +107,7 @@ JSON 을 출력하도록 파인튜닝한다.
 - **`token2json` 전 BOS + task_prompt 제거** — 남은 special token 이 정규식 파싱을 깸.
 
 ### 4단계 — 전체 연결(end-to-end) 파이프라인  (`pipeline_drawing.ipynb`)
-**단일 커널 `kardi_env` 로 끝까지 실행**한다 (커널 전환 불필요). 파트 A→B 를 이어서 돌리면 되고,
+**단일 커널 `donut_vml` 로 끝까지 실행**한다 (커널 전환 불필요). 파트 A→B 를 이어서 돌리면 되고,
 `meta.json`/크롭은 디버깅용 중간 산출물로 남길 뿐 핸드오프 목적은 아니다.
 - **파트 A** — 검출·크롭
   1. PDF → `page.png` (fitz, 300 DPI)
@@ -156,10 +156,10 @@ yolo_finetune_donut_pipeline/
 ```
 
 ## 실행 순서 요약
-1. 0단계: `rasterize_pdf.ipynb` (kardi_env) — PDF→PNG 300DPI
-2. CVAT 로 뷰 라벨링 → 1단계: `train_view.ipynb` (kardi_env)
-3. 뷰 크롭 생성 → CVAT 로 요소 라벨링(+ `value` 속성) → 2단계: `train_element.ipynb` (kardi_env)
-4. `cvat_to_donut.py` 로 Donut 데이터셋 생성 → 3단계: `donut_training_elements.ipynb` (kardi_env)
-5. 4단계: `pipeline_drawing.ipynb` — 파트 A→B 를 **단일 커널 kardi_env** 로 연속 실행 (커널 전환 없음)
+1. 0단계: `rasterize_pdf.ipynb` (donut_vml) — PDF→PNG 300DPI
+2. CVAT 로 뷰 라벨링 → 1단계: `train_view.ipynb` (donut_vml)
+3. 뷰 크롭 생성 → CVAT 로 요소 라벨링(+ `value` 속성) → 2단계: `train_element.ipynb` (donut_vml)
+4. `cvat_to_donut.py` 로 Donut 데이터셋 생성 → 3단계: `donut_training_elements.ipynb` (donut_vml)
+5. 4단계: `pipeline_drawing.ipynb` — 파트 A→B 를 **단일 커널 donut_vml** 로 연속 실행 (커널 전환 없음)
 
-> 전 단계 단일 커널 `kardi_env`. 다른 환경 불필요.
+> 전 단계 단일 커널 `donut_vml`. 다른 환경 불필요.

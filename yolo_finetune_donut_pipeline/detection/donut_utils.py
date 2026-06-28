@@ -1,7 +1,7 @@
 """
 donut_utils.py — Donut 토큰 I/O 공용 유틸리티 모듈.
 
-crop_utils.py 와 동일하게 노트북 옆에 두는 .py 헬퍼 패턴입니다. 단일 커널(kardi_env)에서
+crop_utils.py 와 동일하게 노트북 옆에 두는 .py 헬퍼 패턴입니다. 단일 커널(donut_vml)에서
 검출·인식을 모두 돌리는 파이프라인 노트북들이 import 해서 씁니다:
 
     import sys; sys.path.append("detection")

@@ -1,7 +1,7 @@
 # Element Donut 인식모델 평가 리포트
 
 > 대상 체크포인트: `checkpoints_elements/final` (best = step 450 / epoch 4)
-> 평가일: 2026-06-24 · 환경: `kardi_env` (torch 2.11.0+cu130 · transformers 4.57.6 · CUDA)
+> 평가일: 2026-06-24 · 환경: `donut_vml` (평가 당시 스택: torch 2.11.0+cu130 · transformers 4.57.6 · CUDA)
 > 평가셋: `data/processed_elements/val` (197장) · 지표: Leaf-Match Score (노트북 Step 5 동일 로직)
 
 ---
@@ -111,7 +111,7 @@ best_metric(eval_loss) = 1.0174  @ step 450 (= final 에 저장된 모델)
 ## 6. 재현 방법
 
 ```bash
-conda activate kardi_env
+conda activate donut_vml
 # 노트북: donut_training_elements.ipynb → Step 5b (cell 23) 실행
 #   - 체크포인트: checkpoints_elements/final
 #   - 평가셋    : data/processed_elements/val (197장)

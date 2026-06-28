@@ -42,7 +42,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-# ── 폰트: matplotlib 동봉 DejaVuSans (kardi_env 에 항상 존재, 공학 기호 커버) ──
+# ── 폰트: matplotlib 동봉 DejaVuSans (donut_vml 에 항상 존재, 공학 기호 커버) ──
 try:
     import matplotlib
     _FONT_DIR = Path(matplotlib.__file__).parent / "mpl-data" / "fonts" / "ttf"

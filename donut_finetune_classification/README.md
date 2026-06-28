@@ -40,8 +40,6 @@
 아직 **전체 학습(Trainer.train)·generate 까지는 미검증** — 실행 중 5.x API 차로 막히면 첫 코드 셀의
 `%pip install "transformers==4.56.1"` 주석을 푸세요(가급적 별도 env — 도면 학습 노트북과 충돌 방지).
 
-> 참고: `CLAUDE.md` 에는 transformers 4.57.6 으로 적혀 있으나 실제 `donut_vml` env 는 **5.12.1** 입니다.
-
 ## 기타
 
 - GPU 여유가 적으면 `per_device_train_batch_size` 를 1 로 낮추고 `gradient_accumulation_steps` 를 올리세요.

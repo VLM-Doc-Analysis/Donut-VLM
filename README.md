@@ -13,8 +13,9 @@
 ## YOLO → Donut 파이프라인
 
 요소를 먼저 **검출·정렬해 작은 크롭**으로 만든 뒤, 그 크롭을 Donut 으로 읽습니다.
-도면 전체를 `1280×960` 으로 줄이면 치수 글자가 뭉개지지만, 요소 크롭은 가독성이 높아
-인식 정확도가 크게 좋아집니다. 진입점은 [`yolo_finetune_donut_pipeline/`](yolo_finetune_donut_pipeline/) 입니다.
+도면 전체를 작은 해상도(whole-page 베이스라인 기준 `1280×960`)로 줄이면 치수 글자가 뭉개지지만,
+요소를 크롭해 작은 이미지(element Donut 은 `384×384`)로 인식하면 가독성이 높아 정확도가 크게 좋아집니다.
+진입점은 [`yolo_finetune_donut_pipeline/`](yolo_finetune_donut_pipeline/) 입니다.
 
 ![YOLO → Donut 파이프라인](assets/pipeline.svg)
 
@@ -36,8 +37,8 @@ PDF ──rasterize(300 DPI)──▶ page.png
 | 단계 | 위치 | 산출물 |
 |---|---|---|
 | 0. 래스터화 | `detection/rasterize_pdf.ipynb` | `data/drawings_pages/*.png` |
-| 1. View 검출 학습 | `detection/view/train_view.ipynb` + `view.yaml` | `…/runs/view/weights/best.pt` |
-| 2. Element 검출 학습 | `detection/element/train_element.ipynb` + `element.yaml` | `…/runs/element/weights/best.pt` |
+| 1. View 검출 학습 | `detection/view/train_view.ipynb` + `view.yaml` | `…/runs/detect/runs/view/weights/best.pt` |
+| 2. Element 검출 학습 | `detection/element/train_element.ipynb` + `element.yaml` | `…/runs/obb/runs/element/weights/best.pt` |
 | 3. Element Donut 학습 | `donut_training_elements.ipynb` | `checkpoints_elements/final` |
 | 4. End-to-end | `pipeline_drawing.ipynb` | `result.json` |
 

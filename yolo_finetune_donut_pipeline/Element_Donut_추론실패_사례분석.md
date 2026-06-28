@@ -1,7 +1,7 @@
 # Element Donut — 추론 실패 사례 분석
 
 > 대상: `checkpoints_elements/final` (토크나이저 확장 후 재학습본, 2026-06-24)
-> 추론: `donut_training_elements.ipynb` Step 6 `predict()` · 환경 `kardi_env`
+> 추론: `donut_training_elements.ipynb` Step 6 `predict()` · 환경 `donut_vml`
 > 작성: 2026-06-24
 > 관련: [`Element_Donut_평가리포트.md`](Element_Donut_평가리포트.md) · [`Element_Donut_토크나이저_기호추가_가이드.md`](Element_Donut_토크나이저_기호추가_가이드.md)
 
