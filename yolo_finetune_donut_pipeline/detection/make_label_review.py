@@ -1,28 +1,32 @@
 # 값 라벨 검수 도구 생성 — 서버 없이 브라우저로 여는 자체완결 HTML
 # 사용: conda activate donut_vml; python yolo_finetune_donut_pipeline/detection/make_label_review.py
 # 입력: data/elements_hidpi/{values_hidpi.jsonl, images/}  (prefill_values.py 산출)
-# 출력: data/elements_hidpi/review.html  ← 브라우저로 열어 검수 → "Export" 로 reviewed.jsonl 다운로드
-#        → ingest_reviewed.py 로 라벨에 반영.
+# 출력: data/elements_hidpi/review.html  ← review_server.py 로 열어 검수 → 💾 서버저장 / ✅ 라벨반영
+# (build_rows/build_html 는 make_val_review.py 등에서 재사용)
 import os, json, base64, io
 from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 HID = os.path.join(REPO, "data/elements_hidpi")
 CLASSES = ["Dimension", "GD&T_FCF", "Datum", "Surface_Roughness", "Section", "Hole_Callout"]
-MAXSIDE = 760  # 임베드 이미지 최대 변(가독 + 용량 균형)
+MAXSIDE = 760
 
-rows = []
-for ln in open(os.path.join(HID, "values_hidpi.jsonl"), encoding="utf-8"):
-    ln = ln.strip()
-    if not ln: continue
-    d = json.loads(ln); ip = os.path.join(HID, "images", d["crop"])
-    if not os.path.exists(ip): continue
-    im = Image.open(ip).convert("RGB")
-    if max(im.size) > MAXSIDE:
-        r = MAXSIDE / max(im.size); im = im.resize((int(im.width*r), int(im.height*r)))
-    buf = io.BytesIO(); im.save(buf, "PNG")
-    b64 = base64.b64encode(buf.getvalue()).decode()
-    rows.append({"crop": d["crop"], "cls": d.get("class", "value"), "val": d.get("value", ""),
-                 "img": "data:image/png;base64," + b64})
+def build_rows(jsonl_path, only=None):
+    """values jsonl → [{crop,cls,val,img(base64)}]. only=set 면 그 crop 만."""
+    base = os.path.dirname(jsonl_path); rows = []
+    for ln in open(jsonl_path, encoding="utf-8"):
+        ln = ln.strip()
+        if not ln: continue
+        d = json.loads(ln)
+        if only is not None and d["crop"] not in only: continue
+        ip = os.path.join(base, "images", d["crop"])
+        if not os.path.exists(ip): continue
+        im = Image.open(ip).convert("RGB")
+        if max(im.size) > MAXSIDE:
+            r = MAXSIDE / max(im.size); im = im.resize((int(im.width*r), int(im.height*r)))
+        buf = io.BytesIO(); im.save(buf, "PNG")
+        rows.append({"crop": d["crop"], "cls": d.get("class", "value"), "val": d.get("value", ""),
+                     "img": "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()})
+    return rows
 
 TEMPLATE = r"""<!doctype html><html lang=ko><head><meta charset=utf-8>
 <title>Element 값 라벨 검수</title><style>
@@ -40,7 +44,7 @@ body{font-family:system-ui,sans-serif;margin:0;background:#f4f4f4}
 .row.bad .bbtn{background:#d22;font-weight:700}
 </style></head><body>
 <div id=bar>
- <b>Element 값 검수</b>
+ <b>Element 값 검수 <span style="color:#8cf">/*TITLE*/</span></b>
  <button class=flt data-c=ALL onclick=filt(this)>ALL</button>
  <span id=clsbtns></span>
  <button class=flt data-c=PENDING onclick=filt(this)>미검수만</button>
@@ -51,9 +55,8 @@ body{font-family:system-ui,sans-serif;margin:0;background:#f4f4f4}
 </div>
 <div id=list></div>
 <script>
-const CLASSES=/*CLASSES*/; const DATA=/*DATA*/;
-const KEY="elemReview_v1";
-let st=JSON.parse(localStorage.getItem(KEY)||"{}");  // crop -> {val,cls,status}
+const CLASSES=/*CLASSES*/; const DATA=/*DATA*/; const SAVENAME=/*SAVENAME*/; const KEY=/*KEY*/;
+let st=JSON.parse(localStorage.getItem(KEY)||"{}");
 let curFilter="ALL";
 function save(){localStorage.setItem(KEY,JSON.stringify(st))}
 function rec(c){ if(!st[c]){const d=DATA.find(x=>x.crop==c); st[c]={val:d.val,cls:d.cls,status:"pending"}} return st[c]}
@@ -63,7 +66,7 @@ function toggleBad(c){let r=rec(c); r.status=(r.status=="bad")?"pending":"bad"; 
   if(el){el.className="row "+r.status; let b=el.querySelector(".bbtn"); if(b)b.textContent=(r.status=="bad"?"제외됨 ✕":"제외");}
   prog();}
 function prog(){let ok=0,bad=0; DATA.forEach(d=>{let s=st[d.crop]?st[d.crop].status:"pending"; if(s=="ok")ok++; if(s=="bad")bad++});
-  document.getElementById("prog").textContent=`검수 ${ok+bad}/${DATA.length}  (ok ${ok} / bad ${bad})`}
+  document.getElementById("prog").textContent=`검수 ${ok+bad}/${DATA.length}  (ok ${ok} / 제외 ${bad})`}
 function clsBtns(){let h=""; CLASSES.forEach(c=>h+=`<button class=flt data-c="${c}" onclick=filt(this)>${c}</button>`); document.getElementById("clsbtns").innerHTML=h}
 function filt(btn){curFilter=btn.dataset.c; document.querySelectorAll(".flt").forEach(b=>b.classList.toggle("on",b.dataset.c==curFilter)); render()}
 function render(){
@@ -86,28 +89,24 @@ function render(){
 }
 function paint(){ DATA.forEach((d,i)=>{let el=document.getElementById("row"+i); if(el){let r=st[d.crop]; let s=r?r.status:"pending"; el.className="row "+s; let b=el.querySelector(".bbtn"); if(b)b.textContent=(s=="bad"?"제외됨 ✕":"제외")}}); prog()}
 function jsonl(){return DATA.map(d=>{let r=st[d.crop]||{val:d.val,cls:d.cls,status:"pending"}; return JSON.stringify({crop:d.crop,class:r.cls,value:r.val,status:r.status})}).join("\n")}
-function exportJSONL(){
- let blob=new Blob([jsonl()],{type:"application/x-ndjson"});
- let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="reviewed.jsonl"; a.click();
-}
-async function saveServer(){
- try{let r=await fetch("/save",{method:"POST",body:jsonl()}); let j=await r.json();
-   alert("서버 저장 완료: "+j.saved+"건\n"+j.path);}
- catch(e){alert("저장 실패(서버가 review_server.py 인지 확인): "+e);}
-}
-async function applyServer(){
- if(!confirm("라벨에 반영합니다.\n- ok → 라벨 갱신\n- 제외(빨강) → 이미지·라벨 삭제\n진행할까요?"))return;
- try{let r=await fetch("/apply",{method:"POST",body:jsonl()}); let j=await r.json();
-   alert(j.ok?("✅ 반영 완료:\n"+j.out):("❌ 실패:\n"+(j.err||j.out)));}
- catch(e){alert("반영 실패(서버가 review_server.py 인지 확인): "+e);}
-}
+function exportJSONL(){let blob=new Blob([jsonl()],{type:"application/x-ndjson"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=SAVENAME; a.click();}
+async function saveServer(){try{let r=await fetch("/save?name="+encodeURIComponent(SAVENAME),{method:"POST",body:jsonl()}); let j=await r.json(); alert("서버 저장 완료: "+j.saved+"건\n"+j.path);}catch(e){alert("저장 실패(review_server.py 인지 확인): "+e);}}
+async function applyServer(){if(!confirm("라벨에 반영합니다.\n- ok → 라벨 갱신\n- 제외 → 이미지·라벨 삭제\n진행?"))return; try{let r=await fetch("/apply?name="+encodeURIComponent(SAVENAME),{method:"POST",body:jsonl()}); let j=await r.json(); alert(j.ok?("✅ 반영 완료:\n"+j.out):("❌ 실패:\n"+(j.err||j.out)));}catch(e){alert("반영 실패: "+e);}}
 clsBtns(); document.querySelector('.flt[data-c=ALL]').classList.add('on'); render();
 </script></body></html>"""
 
-html = (TEMPLATE
-        .replace("/*CLASSES*/", json.dumps(CLASSES, ensure_ascii=False))
-        .replace("/*DATA*/", json.dumps(rows, ensure_ascii=False)))
-out = os.path.join(HID, "review.html")
-open(out, "w", encoding="utf-8").write(html)
-print(f"검수 도구 생성: {out}  ({len(rows)} 크롭, {os.path.getsize(out)//1024} KB)")
-print("브라우저로 열어 검수 → 'Export reviewed.jsonl' → ingest_reviewed.py 로 반영")
+def build_html(rows, out_path, save_name="reviewed.jsonl", storage_key="elemReview_v2", title=""):
+    html = (TEMPLATE
+            .replace("/*CLASSES*/", json.dumps(CLASSES, ensure_ascii=False))
+            .replace("/*DATA*/", json.dumps(rows, ensure_ascii=False))
+            .replace("/*SAVENAME*/", json.dumps(save_name))
+            .replace("/*KEY*/", json.dumps(storage_key))
+            .replace("/*TITLE*/", title))
+    open(out_path, "w", encoding="utf-8").write(html)
+    return out_path, len(rows), os.path.getsize(out_path)
+
+if __name__ == "__main__":
+    rows = build_rows(os.path.join(HID, "values_hidpi.jsonl"))
+    out, n, sz = build_html(rows, os.path.join(HID, "review.html"), "reviewed.jsonl", "elemReview_v2")
+    print(f"검수 도구 생성: {out}  ({n} 크롭, {sz//1024} KB)")
+    print("review_server.py 로 열어 검수 → 💾 서버 저장 / ✅ 라벨 반영")

@@ -3,7 +3,7 @@
 #   GET  /review.html        검수 UI
 #   POST /save   (body=jsonl) → data/elements_hidpi/reviewed.jsonl 저장(서버)
 #   POST /apply  (body=jsonl) → reviewed.jsonl 저장 + ingest_reviewed.py 실행(라벨 반영, 제외=삭제)
-import http.server, os, sys, json, subprocess
+import http.server, os, sys, json, subprocess, urllib.parse
 HERE = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 HID = os.path.join(REPO, "data/elements_hidpi"); ING = os.path.join(HERE, "ingest_reviewed.py")
 os.chdir(HID)  # review.html 등 서빙 루트
@@ -18,14 +18,17 @@ class H(http.server.SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers(); self.wfile.write(b)
     def do_POST(self):
+        q = urllib.parse.urlparse(self.path); qs = urllib.parse.parse_qs(q.query)
+        name = os.path.basename(qs.get("name", ["reviewed.jsonl"])[0])
+        if not name.endswith(".jsonl"): name = "reviewed.jsonl"
         n = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(n).decode("utf-8")
-        rp = os.path.join(HID, "reviewed.jsonl")
+        rp = os.path.join(HID, name)
         open(rp, "w", encoding="utf-8").write(body)
         cnt = sum(1 for l in body.splitlines() if l.strip())
-        if self.path.startswith("/save"):
+        if q.path.startswith("/save"):
             self._send(200, {"ok": True, "saved": cnt, "path": rp})
-        elif self.path.startswith("/apply"):
+        elif q.path.startswith("/apply"):
             r = subprocess.run([sys.executable, ING, rp], capture_output=True, text=True)
             self._send(200, {"ok": r.returncode == 0, "saved": cnt,
                              "out": r.stdout.strip(), "err": r.stderr.strip()[-600:]})

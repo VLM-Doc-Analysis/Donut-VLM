@@ -24,6 +24,7 @@ ap.add_argument("--crops", required=True); ap.add_argument("--image-size", type=
 ap.add_argument("--out", required=True); ap.add_argument("--epochs", type=int, default=40)
 ap.add_argument("--max-steps", type=int, default=-1, help=">0 면 smoke 테스트")
 ap.add_argument("--val-ratio", type=float, default=0.15); ap.add_argument("--seed", type=int, default=42)
+ap.add_argument("--val-ids", default="", help="held-out val crop id 목록 파일(있으면 random split 대신 이걸 val 로)")
 A = ap.parse_args()
 random.seed(A.seed); np.random.seed(A.seed); torch.manual_seed(A.seed)
 TASK = "<s_element>"; ISZ = A.image_size
@@ -38,8 +39,14 @@ for lp in sorted(glob.glob(f"{root}/labels/*.json")):
     g = json.load(open(lp, encoding="utf-8")); cls = next(iter(g)); val = str(g[cls])
     if val.strip() == "": continue   # 미라벨 제외
     pairs.append((ip, cls, val))
-random.shuffle(pairs); nv = max(1, int(len(pairs)*A.val_ratio))
-val_p, train_p = pairs[:nv], pairs[nv:]
+if A.val_ids and os.path.exists(A.val_ids):
+    vids = set(l.strip() for l in open(A.val_ids, encoding="utf-8") if l.strip())
+    val_p = [p for p in pairs if os.path.basename(p[0]) in vids]
+    train_p = [p for p in pairs if os.path.basename(p[0]) not in vids]
+    print(f"[held-out val] val_ids={len(vids)} 매칭 {len(val_p)}")
+else:
+    random.shuffle(pairs); nv = max(1, int(len(pairs)*A.val_ratio))
+    val_p, train_p = pairs[:nv], pairs[nv:]
 print(f"crops={root} | train {len(train_p)} / val {len(val_p)} | image_size {ISZ}")
 
 # ── 프로세서/모델(flat: <s_value> + 기호 토큰) ──
