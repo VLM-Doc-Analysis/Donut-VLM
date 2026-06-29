@@ -1,6 +1,6 @@
 # Element Donut — 성능 미달 원인 분석 & 해결방안
 
-> 대상: `donut_training_elements.ipynb` (YOLO→Donut 파이프라인의 element 값 인식 = "Numerical VLM")
+> 대상: `donut_training_elements_flat.ipynb` (YOLO→Donut 파이프라인의 element 값 인식 = "Numerical VLM")
 > 근거: 본 프로젝트 다수 실험(2026-06) + 논문 Khan et al. (arXiv:2510.21862 / RCIM 2026, *From Drawings to Decisions*)
 > 작성: 2026-06-25
 > 관련: [`Element_Donut_평가리포트.md`](Element_Donut_평가리포트.md) · [`Element_Donut_근본원인_분석.md`](Element_Donut_근본원인_분석.md) · [`Element_Donut_추론실패_사례분석.md`](Element_Donut_추론실패_사례분석.md) · [`Element_Donut_토크나이저_기호추가_가이드.md`](Element_Donut_토크나이저_기호추가_가이드.md)

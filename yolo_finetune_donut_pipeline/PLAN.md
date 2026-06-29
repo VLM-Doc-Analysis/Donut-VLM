@@ -62,7 +62,7 @@ Donut(transformers/torch) 의존성이 **모두 설치돼 있어 커널 전환·
 3. 학습 → `detection/element/runs/element/weights/best.pt`
 - 라벨 포맷: `<class> <x1> <y1> ... <x4> <y4>` (4점, 0~1 정규화)
 
-### 3단계 — Donut 요소 파인튜닝  (`donut_training_elements.ipynb`, donut_vml)
+### 3단계 — Donut 요소 파인튜닝  (`donut_training_elements_flat.ipynb`, donut_vml)
 
 범용 문서 모델 `naver-clova-ix/donut-base` 를 **도면 요소 전용 인식 태스크**로 바꾸는 단계.
 베이스 모델은 도면 치수/공차 기호(Ø, Ra, ± 등)를 모르므로, 정렬된 요소 크롭 → `{"<type>":"<value>"}`
@@ -141,7 +141,7 @@ JSON 을 출력하도록 파인튜닝한다.
 yolo_finetune_donut_pipeline/
 ├─ PLAN.md                          # (이 문서)
 ├─ pipeline_drawing.ipynb           # 4단계 전체 연결
-├─ donut_training_elements.ipynb    # 3단계 Donut 파인튜닝
+├─ donut_training_elements_flat.ipynb    # 3단계 Donut 파인튜닝
 └─ detection/
    ├─ rasterize_pdf.ipynb           # 0단계
    ├─ crop_utils.py                 # 공용 크롭/정렬
@@ -159,7 +159,7 @@ yolo_finetune_donut_pipeline/
 1. 0단계: `rasterize_pdf.ipynb` (donut_vml) — PDF→PNG 300DPI
 2. CVAT 로 뷰 라벨링 → 1단계: `train_view.ipynb` (donut_vml)
 3. 뷰 크롭 생성 → CVAT 로 요소 라벨링(+ `value` 속성) → 2단계: `train_element.ipynb` (donut_vml)
-4. `cvat_to_donut.py` 로 Donut 데이터셋 생성 → 3단계: `donut_training_elements.ipynb` (donut_vml)
+4. `cvat_to_donut.py` 로 Donut 데이터셋 생성 → 3단계: `donut_training_elements_flat.ipynb` (donut_vml)
 5. 4단계: `pipeline_drawing.ipynb` — 파트 A→B 를 **단일 커널 donut_vml** 로 연속 실행 (커널 전환 없음)
 
 > 전 단계 단일 커널 `donut_vml`. 다른 환경 불필요.

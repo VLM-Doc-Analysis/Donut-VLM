@@ -23,7 +23,7 @@ Donut 값 인식의 근본 병목은 **데이터 규모**입니다(실라벨 ~1,
 
     # 그 뒤 실데이터와 합쳐 split → 재학습:
     #   data/elements_synth 와 data/elements 를 한 폴더로 모으거나,
-    #   donut_training_elements.ipynb 의 split 셀이 두 소스를 모두 읽도록 경로 지정.
+    #   donut_training_elements_flat.ipynb 의 split 셀이 두 소스를 모두 읽도록 경로 지정.
 
 주의
 ----

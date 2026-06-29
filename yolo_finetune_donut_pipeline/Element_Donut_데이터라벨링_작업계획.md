@@ -122,7 +122,7 @@ CVAT에서 박스마다: **① 박스 정렬 보정 → ② class 확인 → ③
 1. CVAT → **"CVAT for images 1.1"** XML export.
 2. `python detection/cvat_to_donut.py --xml <export.xml> --images ../data/view_crops`
    → `data/elements/{images,labels}` 생성 (`rectify_obb`로 추론과 동일 정렬).
-3. `donut_training_elements.ipynb` split → 재학습(bf16, task `<s_element>`).
+3. `donut_training_elements_flat.ipynb` split → 재학습(bf16, task `<s_element>`).
 4. **평가는 field-level P/R/F1**(부분점수) + 실검증셋으로만. exact만 보지 말 것.
 5. (보강) 합성 `synth_elements.py`로 부족 클래스 보충 — **실데이터 우선, 합성은 보조**.
 

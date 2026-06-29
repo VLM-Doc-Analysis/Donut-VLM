@@ -110,7 +110,7 @@ model.config.pad_token_id           = processor.tokenizer.pad_token_id
 - `<s_cord-v2>` 는 **디코더의 시작 토큰**이기도 하다(태스크 지정 + 생성 시작 신호).
 
 > 📌 **이 저장소의 구현**: 위 ①~⑤(라벨에서 키 수집·등록)는 **완전한 방식**으로,
-> 이제 **세 학습 노트북 모두**(`donut_training.ipynb`(HF gt_parse) · `donut_training_drawings.ipynb` · `donut_training_elements.ipynb`)의
+> 이제 **세 학습 노트북 모두**(`donut_training.ipynb`(HF gt_parse) · `donut_training_drawings.ipynb` · `donut_training_elements_flat.ipynb`)의
 > `build_model_and_processor` 가 이렇게 한다. (예전엔 CORD 노트북이 task 토큰만 등록했으나, 필드 토큰을 subword로 쪼개지 않도록 키 수집을 추가함.)
 > **새 도메인 이식 시에도 위 ①~⑤(키 수집·등록)을 그대로 따르면 된다.**
 
@@ -338,7 +338,7 @@ Donut 학습 기계는 **도메인을 모른다.** 하는 일은 늘 똑같다:
 |---|---|---|---|---|
 | `donut_training.ipynb` | `<s_cord-v2>` | 512 | HF cord-v2 | `menu`/`total`… |
 | `donut_training_drawings.ipynb` | `<s_drawing>` | 768 | 로컬 도면 | `title_block`/`dimensions`… |
-| `donut_training_elements.ipynb` | `<s_element>` | 128 | 로컬 요소 크롭 | `Dimension`/`GD&T_FCF`…(클래스) → 구조화 필드 `nominalValue`/`tolerance`/`datumReference`… |
+| `donut_training_elements_flat.ipynb` | `<s_element>` | 128 | 로컬 요소 크롭 | `Dimension`/`GD&T_FCF`…(클래스) → 구조화 필드 `nominalValue`/`tolerance`/`datumReference`… |
 
 ---
 

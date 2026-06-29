@@ -1,6 +1,6 @@
 # Element Donut — 토크나이저에 도면 기호 추가 가이드
 
-> 대상: `donut_training_elements.ipynb` · Step 2 `build_model_and_processor` (cell id `cell-model-code`)
+> 대상: `donut_training_elements_flat.ipynb` · Step 2 `build_model_and_processor` (cell id `cell-model-code`)
 > 배경: `checkpoints_elements/final` 의 Leaf-Match 0.51% 실패 원인 중 하나가 **값(value) 문자의 토크나이저 미수용**.
 > base 모델 `naver-clova-ix/donut-base` (XLM-R SentencePiece, **NFKC 정규화** 적용)
 > 작성/검증일: 2026-06-24 · 환경: `donut_vml`

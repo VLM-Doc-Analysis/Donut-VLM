@@ -127,7 +127,7 @@ data/elements/
 ```
 
 - 이미지·라벨은 같은 stem으로 **1:1 매칭**.
-- 이후 **`donut_training_elements.ipynb`** 의 split 셀이 `train/val`로 나눠 Donut 파인튜닝 →
+- 이후 **`donut_training_elements_flat.ipynb`** 의 split 셀이 `train/val`로 나눠 Donut 파인튜닝 →
   `checkpoints_elements/final` 모델 생성.
 
 ---
@@ -144,7 +144,7 @@ cvat_to_donut.py
 data/elements/{images,labels}/  ({"<class>": "<value>"})
    │  json2token:  {"Dimension":"Ø9 ±0.2"} → <s_Dimension>Ø9 ±0.2</s_Dimension>
    ▼
-donut_training_elements.ipynb  → checkpoints_elements/final
+donut_training_elements_flat.ipynb  → checkpoints_elements/final
    │  (추론 시 token2json 으로 다시 {"<class>": "<value>"} 복원)
 ```
 
@@ -158,7 +158,7 @@ donut_training_elements.ipynb  → checkpoints_elements/final
 - [ ] **`CVAT for images 1.1`** 포맷으로 export → `annotations.xml`
 - [ ] (검출용) `Ultralytics YOLO OBB` 포맷으로도 export
 - [ ] `cvat_to_donut.py` 실행 → skip 개수 확인 (값 미입력 박스)
-- [ ] `data/elements/{images,labels}/` 쌍 생성 확인 → `donut_training_elements.ipynb` 학습
+- [ ] `data/elements/{images,labels}/` 쌍 생성 확인 → `donut_training_elements_flat.ipynb` 학습
 
 ---
 

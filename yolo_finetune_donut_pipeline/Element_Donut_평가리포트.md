@@ -112,7 +112,7 @@ best_metric(eval_loss) = 1.0174  @ step 450 (= final 에 저장된 모델)
 
 ```bash
 conda activate donut_vml
-# 노트북: donut_training_elements.ipynb → Step 5b (cell 23) 실행
+# 노트북: donut_training_elements_flat.ipynb → Step 5b (cell 23) 실행
 #   - 체크포인트: checkpoints_elements/final
 #   - 평가셋    : data/processed_elements/val (197장)
 #   - 지표      : Leaf-Match Score (= 정답 leaf 일치율 평균)

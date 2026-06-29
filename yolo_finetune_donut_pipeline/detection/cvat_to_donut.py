@@ -12,7 +12,7 @@ Stage 2 에서 CVAT 로 element 를 라벨링할 때, 각 회전 박스에 `valu
     ../data/elements/labels/<viewstem>__<i>__<type>.json  # {"<type>": "<value>"}
     (data/ 와 checkpoints_elements/ 는 프로젝트 루트 donut_vml/ 에 공유됨)
 
-→ 이후 donut_training_elements.ipynb 의 split 셀이 train/val 로 나눕니다.
+→ 이후 donut_training_elements_flat.ipynb 의 split 셀이 train/val 로 나눕니다.
 
 사용법 (yolo_finetune_donut_pipeline/ 에서):
     python detection/cvat_to_donut.py \
