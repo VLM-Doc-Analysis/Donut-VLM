@@ -11,9 +11,53 @@
 
 ---
 
-## 1. 한 줄 결론
+## 0. 최신 재평가 (2026-06-29 · field-F1)
 
-**현재 모델은 사실상 실패(사용 불가) 상태입니다. Leaf-Match 0.51%로 거의 무작위 수준이며, 재학습이 필요합니다.**
+> 현행 코드(견고 디코딩 + field-level 지표)로 **현재 체크포인트들**을 val 197장에서 재평가한 결과.
+> 지표: **Field-F1**(논문과 동일 계열, P=R=F 근사) · charsim(값 글자유사도) · exact(구조화 dict 필드별 완전일치, 공백무시).
+
+| 모델 (체크포인트) | Field-F1 | charsim | exact | Halluc |
+|:--|--:|--:|--:|--:|
+| **flat** (`checkpoints_elements/final`, 값+정규식) | **0.444** | **0.733** | 41.1% | 0.556 |
+| paper 구조화 · token-mode (`checkpoints_elements_paper/final`) | 0.312 | 0.572 | 28.4% | 0.689 |
+| paper 구조화 · **U+XXXX** (`checkpoints_elements_paper_uxxxx/final`) | 0.349 | 0.598 | 31.5% | 0.651 |
+
+<sub>구조화 두 모델은 타입 조건부 디코딩(typecond) ON 기준. typecond OFF 는 paper 0.299 / U+XXXX 0.344 로 거의 동일(미미한 차이).</sub>
+
+### 클래스별 (flat = 최고 성능본)
+
+| class | F1 | charsim | exact | n |
+|:--|--:|--:|--:|--:|
+| Dimension | 0.415 | 0.704 | 40.0% | 140 |
+| Surface_Roughness | 0.476 | 0.785 | 47.6% | 21 |
+| GD&T_FCF | 0.460 | 0.831 | 18.8% | 16 |
+| Datum | 0.636 | 0.818 | 63.6% | 11 |
+| Hole_Callout | 0.556 | 0.790 | 55.6% | 9 |
+
+### 핵심 발견
+1. **이 리포트의 옛 0.51%(§1~)는 무효** — 현 모델은 "사용 불가"가 아니라 **flat Field-F1 0.444 · charsim 0.73**(값을 평균 73% 글자 수준으로 읽음, 전 클래스 작동).
+2. **flat(0.444) > 구조화(0.31~0.35)** — 소량 데이터에선 "값+정규식"이 "구조 직접생성"보다 안전(문서 결론과 일치).
+3. **U+XXXX 인코딩이 구조화 모델 개선**: token-mode 0.312 → U+XXXX 0.349 (+3.7pt). 특히 **Surface_Roughness 0.476→0.714(+24pt)**. (단, 두 런이 완전 통제된 A/B 는 아님 — 시사적)
+4. **GD&T 는 어떤 방식으로도 미해결**(구조화 F1~0.09·exact 0%) → 희소(16장)+복잡 구조의 라벨/크롭 **품질** 문제. 기호 인코딩·typecond 로 안 풀림.
+
+### 재현
+```bash
+conda activate donut_vml
+cd yolo_finetune_donut_pipeline
+# 평가 스크립트(노트북 helper 재사용): 체크포인트 dir + [typecond]
+python eval_fieldf1.py ../checkpoints_elements/final
+python eval_fieldf1.py ../checkpoints_elements_paper_uxxxx/final typecond
+```
+
+> 결론: 병목은 데이터 양이 아니라 **방식·품질**(같은 데이터로 flat>구조화, U+XXXX>token). 남은 레버는 **GD&T 등 희소·복잡 클래스의 라벨/크롭 품질**.
+
+---
+
+## 1. 한 줄 결론 (2026-06-24 구버전 baseline — §0 으로 대체됨)
+
+> ⚠️ 아래는 **기호 토큰 추가 前** 베이스라인 진단이다. 현재 성능은 위 **§0** 을 볼 것.
+
+**(당시) 모델은 사실상 실패(사용 불가) 상태. Leaf-Match 0.51%로 거의 무작위 수준이며 재학습 필요.**
 
 ---
 
