@@ -58,7 +58,7 @@ function rec(c){ if(!st[c]){const d=DATA.find(x=>x.crop==c); st[c]={val:d.val,cl
 function setOk(c,v,cl){let r=rec(c); r.val=v; r.cls=cl; r.status="ok"; save(); paint()}
 function toggleBad(c){let r=rec(c); r.status=(r.status=="bad")?"pending":"bad"; save();
   let i=DATA.findIndex(x=>x.crop==c); let el=document.getElementById("row"+i);
-  if(el){el.className="row "+r.status; let b=el.querySelector(".bbtn"); if(b)b.textContent=(r.status=="bad"?"제외됨 ✕":"bad");}
+  if(el){el.className="row "+r.status; let b=el.querySelector(".bbtn"); if(b)b.textContent=(r.status=="bad"?"제외됨 ✕":"제외");}
   prog();}
 function prog(){let ok=0,bad=0; DATA.forEach(d=>{let s=st[d.crop]?st[d.crop].status:"pending"; if(s=="ok")ok++; if(s=="bad")bad++});
   document.getElementById("prog").textContent=`검수 ${ok+bad}/${DATA.length}  (ok ${ok} / bad ${bad})`}
@@ -77,12 +77,12 @@ function render(){
      <input class=v id="vi${i}" value="${(r.val||"").replace(/"/g,'&quot;')}"
         onkeydown="if(event.key=='Enter'){setOk('${d.crop}',this.value,document.getElementById('row${i}').querySelector('select').value);let n=document.getElementById('vi${i+1}');if(n)n.focus()}"
         onblur="setOk('${d.crop}',this.value,document.getElementById('row${i}').querySelector('select').value)">
-     <button class=bbtn onclick="toggleBad('${d.crop}')">${r.status=="bad"?"제외됨 ✕":"bad"}</button>
+     <button class=bbtn onclick="toggleBad('${d.crop}')">${r.status=="bad"?"제외됨 ✕":"제외"}</button>
    </div>`;
  });
  document.getElementById("list").innerHTML=html; prog();
 }
-function paint(){ DATA.forEach((d,i)=>{let el=document.getElementById("row"+i); if(el){let r=st[d.crop]; let s=r?r.status:"pending"; el.className="row "+s; let b=el.querySelector(".bbtn"); if(b)b.textContent=(s=="bad"?"제외됨 ✕":"bad")}}); prog()}
+function paint(){ DATA.forEach((d,i)=>{let el=document.getElementById("row"+i); if(el){let r=st[d.crop]; let s=r?r.status:"pending"; el.className="row "+s; let b=el.querySelector(".bbtn"); if(b)b.textContent=(s=="bad"?"제외됨 ✕":"제외")}}); prog()}
 function exportJSONL(){
  let lines=DATA.map(d=>{let r=st[d.crop]||{val:d.val,cls:d.cls,status:"pending"}; return JSON.stringify({crop:d.crop,class:r.cls,value:r.val,status:r.status})});
  let blob=new Blob([lines.join("\n")],{type:"application/x-ndjson"});
