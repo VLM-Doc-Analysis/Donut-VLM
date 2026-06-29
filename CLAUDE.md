@@ -98,11 +98,15 @@ Step 1 의 단일 `CFG` 딕셔너리로 구동. 실제로 만지는 값:
 
 ## 데이터 레이아웃
 
-대용량 산출물(`data/`·`checkpoints*/`·`output/`·`datasets/`)은 **Git LFS** 로 추적·커밋한다.
-가중치(`*.safetensors`·`*.pt`·`*.pth`)와 데이터셋 이미지(`*.png`·`*.jpg`·`*.jpeg`)는 `.gitattributes` 의 LFS 필터로 포인터화되어 저장됨.
-클론 후 `git lfs install && git lfs pull` 로 실제 바이너리를 받는다(미설치 시 포인터만). LFS 용량이
-십수 GB 라 GitHub LFS 무료 한도(각 1 GB/월)를 초과 — 유료 데이터 플랜 필요. `runs/`·`__pycache__/`·
-`.venv/`·`donut_base_test.ipynb` 등은 여전히 `.gitignore` 제외.
+대용량 산출물(`data/`·`checkpoints*/`·`output/`·`datasets/`)은 **로컬에서 노트북/스크립트로 생성**하며
+**git 에 커밋하지 않는다**(LFS 비용 회피). 가중치(`*.safetensors`·`*.pt`·`*.pth`)·데이터셋 이미지
+(`*.png`·`*.jpg`·`*.jpeg`)·PDF 는 `.gitignore` 로 스테이징에서 제외되고, `.gitattributes` 의 LFS 필터는
+과거 호환·문서이미지 예외 처리 용도로만 남겨둔다. 따라서 **클론 후 모델·데이터는 직접 학습/재생성**해야 한다.
+`runs/`·`__pycache__/`·`.venv/`·`donut_base_test.ipynb` 등도 `.gitignore` 제외.
+
+> ⚠️ **LFS 커밋 금지(사용자 지침).** `git add` 시 LFS 대상(체크포인트·`*.safetensors`·데이터 이미지·PDF)이
+> 딸려오지 않게 **경로를 명시**해 add 하고, 이미 추적 중인 LFS 파일이라도 **새로 커밋하지 말 것**.
+> 커밋 가능한 것은 `.md`·`.py`·`.ipynb`(노트북은 LFS 아님)와 아래 "문서용 이미지" 예외뿐.
 
 ### 이미지 LFS 정책 (중요)
 **`*.png`/`*.jpg`/`*.jpeg` 는 전역 LFS 대상이지만, 문서·노트북·README 에 임베드되어 GitHub 에서
@@ -117,7 +121,7 @@ Step 1 의 단일 `CFG` 딕셔너리로 구동. 실제로 만지는 값:
   `SROIE_donut/assets/donut.png`, `**/assets/donut_architecture.jpg`, `**/hftuner/assets/*.png`,
   `**/detection/report_assets/*.png`, `test_data/CORD_Test_Data.png`.
 - **새 문서용 이미지 추가 시**: `.gitattributes` 에 해당 경로의 LFS 해제 규칙을 넣고
-  `git add --renormalize <경로>` 로 포인터→실제 blob 전환 후 커밋. **데이터셋 크롭 이미지는 LFS 유지.**
+  `git add --renormalize <경로>` 로 포인터→실제 blob 전환 후 커밋. **데이터셋 크롭 이미지는 커밋하지 않음(`.gitignore` 제외).**
 
 **로컬 데이터셋 포맷**: `<root>/images/*.{png,jpg,...}` + `<root>/labels/<같은-stem>.json`. stem 이 매칭되는 쌍만 사용.
 - `data/raw/` — 영수증 원본. CORD 노트북의 "[선택] 로컬 데이터셋 준비" 셀이 `data/processed/{train,val}/...` 로 분할(`VAL_RATIO=0.1`, seed 42).

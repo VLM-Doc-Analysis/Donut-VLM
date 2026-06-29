@@ -55,3 +55,27 @@ __pycache__/
 .DS_Store
 # donut_base_test.ipynb
 donut_finetune_parsing/donut-base-finetuned-sroie-1280x1600/
+
+# ── LFS 커밋 금지 (사용자 지침) ─────────────────────────────────────
+# LFS 로 추적되는 파일 타입을 전부 무시 → 모델·데이터셋 이미지·PDF 가 실수로 스테이징되지 않게 함.
+# 모델·데이터셋은 노트북/스크립트로 재생성하고 git 에는 커밋하지 않는다.
+# (주의: 이미 추적 중인 LFS 파일은 gitignore 로 untrack 되지 않음 — 신규 스테이징만 차단.)
+*.safetensors
+*.pt
+*.pth
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
+# 예외: 문서(README/.md/.ipynb)에 임베드돼 GitHub 에서 렌더돼야 하는 이미지는 일반 blob 으로 커밋 허용.
+#   ★ .gitattributes 에서 -filter 로 LFS 해제된 경로와 '정확히' 일치시킬 것
+#     (LFS 유지 이미지를 여기 negate 하면 다시 LFS 커밋이 발생하므로 금지).
+!assets/*.png
+!assets/*.jpg
+!SROIE_donut/assets/donut.png
+!**/assets/donut_architecture.jpg
+!**/hftuner/assets/donut-arch.png
+!**/hftuner/assets/donut-doc_vqa-inputs.png
+!**/detection/report_assets/*.png
+!test_data/CORD_Test_Data.png
