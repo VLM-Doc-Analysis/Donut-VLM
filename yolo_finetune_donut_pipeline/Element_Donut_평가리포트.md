@@ -53,6 +53,22 @@ python eval_fieldf1.py ../checkpoints_elements_paper_uxxxx/final typecond
 
 ---
 
+## 0-1. 고DPI 부트스트랩 런 (2026-06-29) — ⚠️ 미검증(순환)
+
+고DPI 재취득 파이프라인(`extract_hidpi_crops`→`prefill`→`train_dpi_ab`)으로 첫 학습. **벡터 900/스캔 native** 크롭 651개(제외 41 후), `image_size 768`, flat.
+
+| 구성 | val GT | Field-F1 | charsim | exact |
+|:--|:--|--:|--:|--:|
+| 순환(random split) | pre-fill(모델 초안) | 0.835 | 0.919 | 83.5% |
+| held-out(val 학습제외) | "수용" 100개(편집 4 / 초안수용 96) | 0.890 | 0.937 | 89.0% |
+
+> ⚠️ **두 수치 모두 신뢰 불가(순환).** val GT 가 사실상 **모델 초안(pre-fill)** 이다(held-out 도 96/100 이 미편집 수용). 0.835→0.890 차이는 *순환 제거가 아니라* split·변동.
+> - 진짜 비순환 수치를 얻으려면 **val 값을 이미지 대조해 직접 교정/확정**해야 함(`review_val.html` → Enter/수정).
+> - 이 런이 확인한 것: **고DPI 파이프라인·image_size 768 학습이 정상 작동**(plumbing + 부트스트랩). **품질 레버(고DPI가 정확도를 올리나)는 미확정.**
+> - GD&T 는 로컬 소스 3개뿐이라 이 셋으로 평가 불가 → Phase 2(소스 확충) 필요.
+
+---
+
 ## 1. 한 줄 결론 (2026-06-24 구버전 baseline — §0 으로 대체됨)
 
 > ⚠️ 아래는 **기호 토큰 추가 前** 베이스라인 진단이다. 현재 성능은 위 **§0** 을 볼 것.
