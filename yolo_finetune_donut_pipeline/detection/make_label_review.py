@@ -45,7 +45,9 @@ body{font-family:system-ui,sans-serif;margin:0;background:#f4f4f4}
  <span id=clsbtns></span>
  <button class=flt data-c=PENDING onclick=filt(this)>미검수만</button>
  <span id=prog></span>
- <button id=exp onclick=exportJSONL()>Export reviewed.jsonl</button>
+ <button id=sv onclick=saveServer() style="background:#1a73e8;color:#fff;border:0;padding:6px 12px;border-radius:5px;cursor:pointer;font-weight:700">💾 서버 저장</button>
+ <button id=ap onclick=applyServer() style="background:#e8710a;color:#fff;border:0;padding:6px 12px;border-radius:5px;cursor:pointer;font-weight:700">✅ 라벨 반영</button>
+ <button id=exp onclick=exportJSONL() style="background:#555;color:#fff;border:0;padding:6px 10px;border-radius:5px;cursor:pointer">⬇ 파일</button>
 </div>
 <div id=list></div>
 <script>
@@ -83,10 +85,21 @@ function render(){
  document.getElementById("list").innerHTML=html; prog();
 }
 function paint(){ DATA.forEach((d,i)=>{let el=document.getElementById("row"+i); if(el){let r=st[d.crop]; let s=r?r.status:"pending"; el.className="row "+s; let b=el.querySelector(".bbtn"); if(b)b.textContent=(s=="bad"?"제외됨 ✕":"제외")}}); prog()}
+function jsonl(){return DATA.map(d=>{let r=st[d.crop]||{val:d.val,cls:d.cls,status:"pending"}; return JSON.stringify({crop:d.crop,class:r.cls,value:r.val,status:r.status})}).join("\n")}
 function exportJSONL(){
- let lines=DATA.map(d=>{let r=st[d.crop]||{val:d.val,cls:d.cls,status:"pending"}; return JSON.stringify({crop:d.crop,class:r.cls,value:r.val,status:r.status})});
- let blob=new Blob([lines.join("\n")],{type:"application/x-ndjson"});
+ let blob=new Blob([jsonl()],{type:"application/x-ndjson"});
  let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="reviewed.jsonl"; a.click();
+}
+async function saveServer(){
+ try{let r=await fetch("/save",{method:"POST",body:jsonl()}); let j=await r.json();
+   alert("서버 저장 완료: "+j.saved+"건\n"+j.path);}
+ catch(e){alert("저장 실패(서버가 review_server.py 인지 확인): "+e);}
+}
+async function applyServer(){
+ if(!confirm("라벨에 반영합니다.\n- ok → 라벨 갱신\n- 제외(빨강) → 이미지·라벨 삭제\n진행할까요?"))return;
+ try{let r=await fetch("/apply",{method:"POST",body:jsonl()}); let j=await r.json();
+   alert(j.ok?("✅ 반영 완료:\n"+j.out):("❌ 실패:\n"+(j.err||j.out)));}
+ catch(e){alert("반영 실패(서버가 review_server.py 인지 확인): "+e);}
 }
 clsBtns(); document.querySelector('.flt[data-c=ALL]').classList.add('on'); render();
 </script></body></html>"""
