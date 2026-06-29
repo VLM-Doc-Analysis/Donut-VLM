@@ -81,6 +81,18 @@ raw_pdf/*.pdf (50)
 4. 값 라벨 이식(기존 stem 매칭 가능분) + 부족분 라벨링.
 5. flat 학습 → **900 vs 300 field-F1 비교** → 품질 레버 정량 확정.
 
+> **A/B 실행 절차(검수 완료 후)** — 스크립트 준비됨(plumbing 검증):
+> ```bash
+> # ① 짝 크롭 생성(벡터, 동일 element id)
+> python detection/extract_hidpi_crops.py --dpi 300 --vector-only --out data/elements_hidpi_300
+> python detection/extract_hidpi_crops.py --dpi 900 --vector-only --out data/elements_hidpi_900
+> # ② 검수된 값 라벨(data/elements_hidpi/labels)을 두 디렉터리에 복사(같은 id, 값은 DPI 무관)
+> # ③ 동일 image_size(768)로 각각 학습+field-F1
+> python detection/train_dpi_ab.py --crops data/elements_hidpi_300 --image-size 768 --out checkpoints_ab_300
+> python detection/train_dpi_ab.py --crops data/elements_hidpi_900 --image-size 768 --out checkpoints_ab_900
+> # ④ 두 field-F1 비교 → 해상도(품질) 단독 효과 확정
+> ```
+
 ---
 
 ## 6. 기대효과 / 검증

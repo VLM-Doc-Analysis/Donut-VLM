@@ -1,15 +1,25 @@
 # 고DPI element 크롭 추출 — raw_pdf 적응형 재래스터 + GT 박스(view→element) rectify
 # 사용: conda activate donut_vml; python yolo_finetune_donut_pipeline/detection/extract_hidpi_crops.py
-# 출력: data/elements_hidpi/{images,labels}/  +  data/elements_hidpi/values_hidpi.jsonl (값 라벨은 비움 → prefill 단계)
-import fitz, numpy as np, cv2, os, re, glob, json, sys
+#   [--dpi N]        고정 DPI 강제(기본=적응형: 벡터 900/스캔 native)
+#   [--vector-only]  벡터 PDF 만 (A/B 짝 생성용)
+#   [--out DIR]      출력 디렉터리(기본 data/elements_hidpi)
+# 300/900 A/B 짝 예: --dpi 300 --vector-only --out data/elements_hidpi_300  /  --dpi 900 --vector-only --out data/elements_hidpi_900
+import fitz, numpy as np, cv2, os, re, glob, json, sys, argparse
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 os.chdir(HERE); sys.path.insert(0, HERE)
 from crop_utils import rectify_obb
 
+ap = argparse.ArgumentParser()
+ap.add_argument("--dpi", type=int, default=0, help="고정 DPI(0=적응형)")
+ap.add_argument("--vector-only", action="store_true")
+ap.add_argument("--out", default="data/elements_hidpi")
+A = ap.parse_args()
+FORCE_DPI = A.dpi; VECTOR_ONLY = A.vector_only
+
 ELEM_NAMES = {0: "Dimension", 1: "GD&T_FCF", 2: "Datum", 3: "Surface_Roughness", 4: "Section", 5: "Hole_Callout"}
 VLAB = "view/datasets/view/labels"; ELAB = "element/datasets/element/labels"
-OUT = os.path.join(REPO, "data/elements_hidpi")
+OUT = A.out if os.path.isabs(A.out) else os.path.join(REPO, A.out)
 for sub in ("images", "labels"):
     os.makedirs(os.path.join(OUT, sub), exist_ok=True)
 
@@ -38,6 +48,10 @@ for stem in stems:
     if not os.path.exists(pdf) or not vfile:
         continue
     dpi, kind = adaptive_dpi(pdf)
+    if VECTOR_ONLY and kind != "vector":
+        continue
+    if FORCE_DPI:
+        dpi = FORCE_DPI
     page = render(pdf, dpi); H, W = page.shape[:2]
     views = [list(map(float, l.split()[1:5])) for l in open(vfile[0]) if l.split() and l.split()[0] == "0"]
     n_pdf += 1
