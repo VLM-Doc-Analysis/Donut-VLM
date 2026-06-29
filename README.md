@@ -43,6 +43,7 @@ PDF ──rasterize(300 DPI)──▶ page.png
 | 4. End-to-end | `pipeline_drawing.ipynb` | `result.json` |
 
 > **3단계 노트북 2종** — JSON 구조화 방식이 다릅니다. `_flat`: 모델이 **통짜 값**만 생성하고 구조 분해는 **사후 정규식**(`parse_to_schema`). `_paper`(Khan et al. 논문식): 모델이 **카테고리별 구조화 JSON 을 직접 생성** + **타입 조건부 디코딩**. 핵심 차이는 `parse_to_schema` 가 flat=출력 사후처리 ↔ paper=학습 타깃 전처리라는 점. **소량 데이터에선 `_flat`, 데이터(특히 GD&T·Hole) 확충 후엔 `_paper` 권장.**
+> **기호 인코딩은 두 노트북 공통** — 도면 기호(⊥·Ø·±·°)를 토크나이저 **실제 토큰으로 등록**(논문의 `"U+2316"` 식 ASCII 코드포인트 인코딩과 다름 — 8자 코드 암기 부담 제거, 단 희소 기호는 임베딩 미학습 위험).
 
 공용 헬퍼 (`detection/`): `crop_utils.py`(크롭·OBB 정렬), `donut_utils.py`(토큰 I/O), `cvat_to_donut.py`(CVAT → Donut 데이터 변환).
 단계별 상세 계획은 [`yolo_finetune_donut_pipeline/PLAN.md`](yolo_finetune_donut_pipeline/PLAN.md),
