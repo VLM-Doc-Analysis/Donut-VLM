@@ -73,7 +73,7 @@ raw_pdf/*.pdf (50)
 
 ## 5. 즉시 실행 가능한 첫 스텝 (Phase 1)
 
-> ✅ **구현됨(2026-06-29)**: `detection/extract_hidpi_crops.py`(적응형 DPI 재래스터 + GT 박스 view→element + rectify → `data/elements_hidpi/`, **692 크롭**: 벡터 900 / 스캔 native) · `detection/prefill_values.py`(현 Donut 으로 값 초안 → `values_hidpi.jsonl`, status=pending). **남은 것 = 값 교정(사람) → flat 학습 A/B.** ⚠️ 추출 GD&T 3개뿐 → GD&T 는 Phase 2 소스 확충 필요.
+> ✅ **구현됨(2026-06-29)**: `detection/extract_hidpi_crops.py`(적응형 DPI 재래스터 + GT 박스 view→element + rectify → `data/elements_hidpi/`, **692 크롭**: 벡터 900 / 스캔 native) · `detection/prefill_values.py`(현 Donut 으로 값 초안 → `values_hidpi.jsonl`, status=pending) · **라벨 검수 도구** `detection/make_label_review.py`(→ 서버 없이 브라우저로 여는 `review.html`: 크롭+값 편집·클래스 필터·키보드·bad 제외·JSONL export) → `detection/ingest_reviewed.py`(검수본 라벨 반영). **남은 것 = 값 교정(사람) → flat 학습 A/B.** ⚠️ 추출 GD&T 3개뿐 → GD&T 는 Phase 2 소스 확충 필요.
 
 1. `rasterize_pdf.ipynb` 의 `DPI` → **벡터 900 / 스캔 native** 적응형으로 50개 재래스터.
 2. GT 박스(view→element, 정규화)로 600 DPI 크롭 추출 스크립트(`crop_utils.rectify_obb` 재사용) → `data/elements_hidpi/`.

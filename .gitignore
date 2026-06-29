@@ -79,3 +79,6 @@ donut_finetune_parsing/donut-base-finetuned-sroie-1280x1600/
 !**/hftuner/assets/donut-doc_vqa-inputs.png
 !**/detection/report_assets/*.png
 !test_data/CORD_Test_Data.png
+
+# 고DPI 재취득 파생물(파생 데이터·검수 html — 로컬)
+data/elements_hidpi/
