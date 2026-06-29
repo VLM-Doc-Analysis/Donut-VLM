@@ -32,12 +32,12 @@ body{font-family:system-ui,sans-serif;margin:0;background:#f4f4f4}
 .flt.on{background:#1a73e8} #exp{background:#0a0;color:#fff;border:0;padding:6px 12px;border-radius:5px;cursor:pointer;font-weight:700}
 #prog{margin-left:auto}
 .row{display:flex;gap:10px;align-items:center;background:#fff;margin:6px 10px;padding:8px;border-radius:6px;border-left:6px solid #ccc}
-.row.ok{border-left-color:#0a0;background:#f3fff3} .row.bad{border-left-color:#d22;background:#fff3f3;opacity:.6}
+.row.ok{border-left-color:#0a0;background:#f3fff3} .row.bad{border-left-color:#d22;background:#ffdede;opacity:.75}
 .row img{height:64px;background:#fafafa;border:1px solid #eee;transition:transform .1s} .row img:hover{transform:scale(2.4);transform-origin:left center;position:relative;z-index:5}
 .row select{padding:4px} .row input.v{flex:1;padding:6px 8px;font-size:16px;font-family:monospace}
 .row .id{font-size:11px;color:#999;width:230px;overflow:hidden;white-space:nowrap}
-.bbtn{background:#d22;color:#fff;border:0;padding:5px 9px;border-radius:5px;cursor:pointer}
-.row.bad .bbtn{background:#555}
+.bbtn{background:#888;color:#fff;border:0;padding:5px 9px;border-radius:5px;cursor:pointer;min-width:74px}
+.row.bad .bbtn{background:#d22;font-weight:700}
 </style></head><body>
 <div id=bar>
  <b>Element 값 검수</b>
@@ -56,7 +56,10 @@ let curFilter="ALL";
 function save(){localStorage.setItem(KEY,JSON.stringify(st))}
 function rec(c){ if(!st[c]){const d=DATA.find(x=>x.crop==c); st[c]={val:d.val,cls:d.cls,status:"pending"}} return st[c]}
 function setOk(c,v,cl){let r=rec(c); r.val=v; r.cls=cl; r.status="ok"; save(); paint()}
-function toggleBad(c){let r=rec(c); r.status=(r.status=="bad")?"pending":"bad"; save(); paint()}
+function toggleBad(c){let r=rec(c); r.status=(r.status=="bad")?"pending":"bad"; save();
+  let i=DATA.findIndex(x=>x.crop==c); let el=document.getElementById("row"+i);
+  if(el){el.className="row "+r.status; let b=el.querySelector(".bbtn"); if(b)b.textContent=(r.status=="bad"?"제외됨 ✕":"bad");}
+  prog();}
 function prog(){let ok=0,bad=0; DATA.forEach(d=>{let s=st[d.crop]?st[d.crop].status:"pending"; if(s=="ok")ok++; if(s=="bad")bad++});
   document.getElementById("prog").textContent=`검수 ${ok+bad}/${DATA.length}  (ok ${ok} / bad ${bad})`}
 function clsBtns(){let h=""; CLASSES.forEach(c=>h+=`<button class=flt data-c="${c}" onclick=filt(this)>${c}</button>`); document.getElementById("clsbtns").innerHTML=h}
@@ -74,12 +77,12 @@ function render(){
      <input class=v id="vi${i}" value="${(r.val||"").replace(/"/g,'&quot;')}"
         onkeydown="if(event.key=='Enter'){setOk('${d.crop}',this.value,document.getElementById('row${i}').querySelector('select').value);let n=document.getElementById('vi${i+1}');if(n)n.focus()}"
         onblur="setOk('${d.crop}',this.value,document.getElementById('row${i}').querySelector('select').value)">
-     <button class=bbtn onclick="toggleBad('${d.crop}')">bad</button>
+     <button class=bbtn onclick="toggleBad('${d.crop}')">${r.status=="bad"?"제외됨 ✕":"bad"}</button>
    </div>`;
  });
  document.getElementById("list").innerHTML=html; prog();
 }
-function paint(){ DATA.forEach((d,i)=>{let el=document.getElementById("row"+i); if(el){let r=st[d.crop]; el.className="row "+(r?r.status:"pending")}}); prog()}
+function paint(){ DATA.forEach((d,i)=>{let el=document.getElementById("row"+i); if(el){let r=st[d.crop]; let s=r?r.status:"pending"; el.className="row "+s; let b=el.querySelector(".bbtn"); if(b)b.textContent=(s=="bad"?"제외됨 ✕":"bad")}}); prog()}
 function exportJSONL(){
  let lines=DATA.map(d=>{let r=st[d.crop]||{val:d.val,cls:d.cls,status:"pending"}; return JSON.stringify({crop:d.crop,class:r.cls,value:r.val,status:r.status})});
  let blob=new Blob([lines.join("\n")],{type:"application/x-ndjson"});
