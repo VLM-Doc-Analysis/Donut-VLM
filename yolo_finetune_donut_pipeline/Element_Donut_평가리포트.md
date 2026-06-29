@@ -1,8 +1,13 @@
 # Element Donut 인식모델 평가 리포트
 
 > 대상 체크포인트: `checkpoints_elements/final` (best = step 450 / epoch 4)
-> 평가일: 2026-06-24 · 환경: `donut_vml` (평가 당시 스택: torch 2.11.0+cu130 · transformers 4.57.6 · CUDA)
+> 평가일: 2026-06-24 · 환경: `donut_vml` (평가 당시 스택: torch 2.11.0+cu130 · transformers 4.57.6 · CUDA — **현재는 cu128 · transformers 5.12.1**)
 > 평가셋: `data/processed_elements/val` (197장) · 지표: Leaf-Match Score (노트북 Step 5 동일 로직)
+>
+> ⚠️ **이 0.51% 는 "기호 토큰 추가 前" 베이스라인이다.** 이후 토크나이저 확장·재학습으로 타입붕괴가 풀리고
+> (타입 91%), 값-전용 Donut 8.1% · TrOCR ~15% 로 올라섰다(→ [`성능미달_원인_및_해결방안`](Element_Donut_성능미달_원인_및_해결방안.md) §1).
+> **0.51% 를 현재 성능으로 인용하지 말 것.** 또한 "데이터 양 부족" 진단은 2026-06-29 재검증으로
+> "양이 아니라 품질·학습설정"으로 정정됐다(논문 B 는 1,406 크롭으로 F1 0.963).
 
 ---
 
