@@ -68,6 +68,17 @@ Donut(transformers/torch) 의존성이 **모두 설치돼 있어 커널 전환·
 베이스 모델은 도면 치수/공차 기호(Ø, Ra, ± 등)를 모르므로, 정렬된 요소 크롭 → `{"<type>":"<value>"}`
 JSON 을 출력하도록 파인튜닝한다.
 
+> 📌 **노트북 변형 · 현행 성능 (2026-07-02 재학습)**: 이 단계의 노트북은 구조화 방식·데이터에 따라 **3종**.
+>
+> | 노트북 | 방식 | 체크포인트 | field-F1 |
+> |:--|:--|:--|--:|
+> | `donut_training_elements_flat.ipynb` (기준) | 값 통짜 + 사후 정규식 | `checkpoints_elements/final` | **0.613** (val 197) |
+> | `donut_training_elements_paper.ipynb` | 구조화 JSON 직접 생성 · U+XXXX | `checkpoints_elements_paper/final` | **0.618** (val 197) |
+> | `donut_training_elements_paper_hidpy.ipynb` | 〃 · 고DPI 데이터 · 글리프 토큰 | `checkpoints_elements_paper_hidpi/final` | **0.888** (검수 val 98) |
+>
+> 같은 데이터에서 paper ≈ flat(GD&T 는 paper 우위), 고DPI 데이터에선 0.888 — 상세·채점 수정 내역은
+> [`Element_Donut_평가리포트.md`](Element_Donut_평가리포트.md) §0-3. 아래 서술은 기준(flat) 노트북 기준.
+
 **모델 구조** (HF `VisionEncoderDecoderModel`)
 - 인코더: Swin Transformer — 크롭 이미지를 시각 특징으로 인코딩.
 - 디코더: BART/mBART — 특징을 받아 타깃을 **토큰 시퀀스**로 생성. 위치 임베딩 한계 768 이 `max_length` 상한
@@ -141,7 +152,9 @@ JSON 을 출력하도록 파인튜닝한다.
 yolo_finetune_donut_pipeline/
 ├─ PLAN.md                          # (이 문서)
 ├─ pipeline_drawing.ipynb           # 4단계 전체 연결
-├─ donut_training_elements_flat.ipynb    # 3단계 Donut 파인튜닝
+├─ donut_training_elements_flat.ipynb         # 3단계 Donut 파인튜닝 (flat, 기준)
+├─ donut_training_elements_paper.ipynb        # 3단계 변형 — 논문식 구조화 JSON (U+XXXX)
+├─ donut_training_elements_paper_hidpy.ipynb  # 3단계 변형 — 논문식 · 고DPI (글리프 토큰)
 └─ detection/
    ├─ rasterize_pdf.ipynb           # 0단계
    ├─ crop_utils.py                 # 공용 크롭/정렬
@@ -152,7 +165,9 @@ yolo_finetune_donut_pipeline/
 # 프로젝트 루트(donut_vml/) 공유:
 #   data/raw_pdf, data/drawings_pages, data/view_crops,
 #   data/elements, data/processed_elements, data/_pipeline_tmp
-#   checkpoints_elements/final
+#   data/elements_hidpi, data/processed_elements_hidpi   # 고DPI 재취득 (hidpi 노트북)
+#   data/elements_synth                                  # 합성 크롭 (synth_elements.py, train 병합)
+#   checkpoints_elements/final, checkpoints_elements_paper/final, checkpoints_elements_paper_hidpi/final
 ```
 
 ## 실행 순서 요약
