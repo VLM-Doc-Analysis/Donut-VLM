@@ -11,9 +11,13 @@
 
 ---
 
-## 0. 최신 재평가 (2026-06-29 · field-F1)
+## 0. 재평가 (2026-06-29 · field-F1) — ⚠️ §0-3 으로 대체됨
 
-> 현행 코드(견고 디코딩 + field-level 지표)로 **현재 체크포인트들**을 val 197장에서 재평가한 결과.
+> ⚠️ **2026-07-02 노트북 리뷰 수정 + 재학습으로 아래 수치는 구버전이다** — 최신 수치는 **§0-3**.
+> 특히 이 표의 "U+XXXX 0.349 / 구조화 열세 / GD&T ~0.09" 결론은 상당 부분 **채점 아티팩트**(디토크나이즈 공백,
+> 단일 데이텀 왕복 버그)였음이 §0-3 에서 확인됐다.
+>
+> 현행 코드(견고 디코딩 + field-level 지표)로 **당시 체크포인트들**을 val 197장에서 재평가한 결과.
 > 지표: **Field-F1**(논문과 동일 계열, P=R=F 근사) · charsim(값 글자유사도) · exact(구조화 dict 필드별 완전일치, 공백무시).
 
 | 모델 (체크포인트) | Field-F1 | charsim | exact | Halluc |
@@ -88,6 +92,71 @@ python eval_fieldf1.py ../checkpoints_elements_paper_uxxxx/final typecond
 > - 다만 **학습 라벨(train 551개)은 여전히 미검수 pre-fill** 이다. train 라벨까지 교정하면 추가 상승 여지 있음(상한 미확정).
 > - 비교 기준: 저해상 구버전 flat 0.444(§0) → 고DPI 비순환 0.816. **단, val 셋·GT 기준이 달라 직접 비교 아님**(저해상은 197장 미검수 val, 고DPI 는 98장 검수 val). 동일 셋 A/B 는 미실시.
 > - 재현: `ingest_reviewed.py reviewed_val.jsonl` → `train_dpi_ab.py --crops data/elements_hidpi --image-size 768 --val-ids val_ids.txt --out checkpoints_hidpi_real`.
+
+---
+
+## 0-3. 노트북 리뷰 수정 + 재학습 (2026-07-02) — ✅ 현행 최신
+
+세 학습 노트북(flat · paper · paper_hidpi)의 코드 리뷰에서 발견한 버그를 수정하고 전부 재학습한 결과.
+(커밋: `40e36d5` hidpi · `666f931` flat · `9241399` paper · `45bc2ae`/`c0963c9` 후속)
+
+**수정 요지 (전 노트북 공통 이식)**
+1. **Step 2 토큰 스캔에 합성 라벨 포함** — 기존엔 train/val 만 스캔해, train 에 병합되는 합성 2,500장의
+   전용 기호(∥·⌖·⏥ 등)가 `<unk>` 로, 구조 필드 태그(`<s_geometricCharacteristic>` 등)가 서브워드 조각으로
+   학습되고 있었다(타입 조건부 `suppress_tokens` 도 무력화). OOV 진단도 합성 포함 전체로 확대(0/4,475 확인).
+2. **단일 데이텀 왕복 버그(`_flatten`)** — `json2token(["A"])` 은 `<sep/>` 없이 직렬화되고 `token2json` 은
+   str 로 복원 → 리스트 GT `["A"]` 와 경로가 어긋나 **단일 데이텀 GD&T 는 모델이 맞혀도 무조건 오답**이었다.
+   §0 의 "구조화 GD&T ~0.09" 는 이 버그의 영향을 포함한 수치.
+3. **U+XXXX 디토크나이즈 공백 보정(`decode_symbols`)** — 숫자 0-9 가 added token 이라 디코드 시
+   `U+00D8` 이 `U+00 D8` 로 쪼개져 글리프 복원이 전부 실패하고 있었다. 보정 한 줄로 paper 모델
+   **0.398 → 0.618** (모델이 아니라 채점이 문제였다는 뜻).
+4. 파서 보강(`_parse_gdt` 기하특성 글리프 화이트리스트·데이텀 1~2글자, `_parse_measure` `+a/-b` 매치·꼬리 보존),
+   합성 병합 `synth_n>0` 게이트, 디코딩 `repetition_penalty=1.5`·`no_repeat_ngram_size=3` 제거
+   (A/B 측정: flat/paper 는 rp1.0+typecond, hidpi 는 beam4+rp1.0+typecond 가 최적).
+
+### 종합 (재학습 후)
+
+| 모델 | val | 이전(§0/§0-2) | Field-F1 | charsim | exact |
+|:--|:--|--:|--:|--:|--:|
+| **flat** (`checkpoints_elements/final`) | 197 미검수 | 0.444 | **0.613** | 0.857 | 58.9% |
+| **paper 구조화 · U+XXXX** (`checkpoints_elements_paper/final`) | 197 미검수 | 0.349 | **0.618** | — | 58.9% |
+| **paper_hidpi 구조화 · 글리프** (`checkpoints_elements_paper_hidpi/final`, beam4) | 98 검수 GT | 0.827¹ | **0.888** | 0.952 | 88.8% |
+
+<sub>¹ hidpi 구조화 노트북의 수정 前 자체 실행값(0.827). §0-2 의 flat hidpi(`checkpoints_hidpi_real`) 0.816 과는
+학습셋 구성(+합성 2,500·균형 샘플러)이 달라 통제 A/B 는 아니나 **동일 검수 val 98** 기준 0.816 → 0.888.
+paper 의 charsim 은 공백 보정 후 스탠드얼론 재평가에서 미산출(F1·exact 만) — 노트북 Step 5b 재실행 시 채워짐.</sub>
+
+### 클래스별
+
+| class | flat F1 / exact | paper(U+XXXX) F1 / exact | n |  | hidpi class | F1 / exact | n |
+|:--|:--|:--|--:|--|:--|:--|--:|
+| Dimension | 0.636 / 62.9% | 0.614 / 59.3% | 140 |  | Dimension | 0.940 / 94.0% | 67 |
+| Surface_Roughness | 0.667 / 66.7% | 0.714 / 71.4% | 21 |  | Hole_Callout | 0.688 / 68.8% | 16 |
+| GD&T_FCF | 0.423 / 18.8% | **0.488 / 31.2%** | 16 |  | Datum | 1.000 / 100% | 7 |
+| Datum | 0.727 / 72.7% | 0.727 / 72.7% | 11 |  | Surface_Roughness | 0.600 / 60.0% | 5 |
+| Hole_Callout | 0.333 / 33.3% | 0.556 / 55.6% | 9 |  | Section | 1.000 / 100% | 3 |
+
+### 핵심 발견 (§0 결론의 수정)
+1. **§0 의 "flat > 구조화" 는 채점 아티팩트가 만든 착시였다** — 아티팩트 제거 + 재학습 후 같은 데이터에서
+   **구조화(0.618) ≈ flat(0.613)**, GD&T 는 **구조화가 우위(0.488 vs 0.423)**. "데이터가 갖춰지면
+   paper 방식이 정규식 한계를 넘어선다"는 문서 가설 방향과 일치.
+2. **"GD&T ~0.09 미해결"도 대부분 아티팩트+토큰 미등록이었다** — 수정 후 0.488(exact 31.2%)로 측정 가능한
+   수준까지 회복. 단 여전히 최약점 클래스(n=16)로 실데이터 확충 필요.
+3. **hidpi 구조화 0.888** — 검수 val 98 기준 현재 프로젝트 최고 수치. 남은 오류는 짧은 수치 오독·희소 기호
+   (°·∡) 누락 등 순수 OCR 레벨.
+4. **한계**: ① hidpi val 에는 GD&T 크롭이 0건이라 합성(GD&T 55%)의 효과를 hidpi 에선 측정 불가 —
+   GD&T 검수 val 확보가 선행 과제. ② flat/paper 의 197 val 은 여전히 미검수 GT(§0-2 교훈 참고).
+
+### 재현
+```bash
+conda activate donut_vml
+cd yolo_finetune_donut_pipeline
+# 각 노트북을 위→아래로 실행 (Step 5b 가 평가):
+#   donut_training_elements_flat.ipynb        → checkpoints_elements/final        (val 197)
+#   donut_training_elements_paper.ipynb       → checkpoints_elements_paper/final  (val 197, U+XXXX)
+#   donut_training_elements_paper_hidpy.ipynb → checkpoints_elements_paper_hidpi/final (val 98, beam4)
+# 수정 前 모델 백업: 각 checkpoints*/final_bak_20260702
+```
 
 ---
 
